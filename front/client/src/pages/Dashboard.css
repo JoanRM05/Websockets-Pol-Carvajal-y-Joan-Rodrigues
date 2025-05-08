@@ -1,0 +1,86 @@
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; 
+    align-items: flex-start;
+    padding: 20px; 
+    box-sizing: border-box; 
+}
+
+.dashboard-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 100%; 
+    text-align: center;
+}
+
+.dashboard-card h1 {
+    display: flex;
+    align-items: center;
+    color: #333;
+    font-size: 40px;
+}
+
+.dashboard-card div p {
+    display: flex;
+    margin: 10px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+.dashboard-card p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+.dashboard-card p strong {
+    color: #333;
+}
+
+.logout-button {
+    height: 100%;
+    padding: 10px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+    background-color: #b02a37;
+}
+
+/* Responsivitat */
+@media (max-width: 480px) {
+    .dashboard-container {
+        padding: 10px; /* Reduïm el padding en pantalles petites */
+    }
+
+    .dashboard-card {
+        padding: 20px;
+        max-width: 100%; /* Permet que ocupi tota l'amplada en mòbils */
+    }
+
+    .dashboard-card h1 {
+        font-size: 24px;
+    }
+
+    .dashboard-card p {
+        font-size: 14px;
+    }
+
+    .logout-button {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
