@@ -94,6 +94,21 @@
     background-color: #0056b3;
 }
 
+.download-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+  
+.download-button:hover {
+    background-color: #45a049;
+}
+
 /* Responsivitat */
 @media (max-width: 480px) {
     .chat-section {

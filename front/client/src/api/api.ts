@@ -17,7 +17,7 @@ export interface Message {
   timestamp: string;
 }
 
-// WebSocket para recibir mensajes
+// WebSocket
 let ws: WebSocket | null = null;
 
 export const connectWebSocket = (onMessage: (message: Message) => void) => {
@@ -67,4 +67,25 @@ export const getChatHistory = async (): Promise<Message[]> => {
     return response.data.messages;
   }
   throw new Error(response.data.message || "Error en recuperar l’historial");
+};
+
+export const downloadChatHistory = async (format: "txt" | "json" = "txt"): Promise<void> => {
+  try {
+    const response = await axios.get(`${API_URL}/chat/view_hist?format=${format}`, {
+      responseType: "blob", 
+    });
+    const blob = new Blob([response.data], { type: response.headers["content-type"] });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `chat_history.${format}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    throw new Error(
+      err instanceof Error ? err.message : "Error al descargar el chat"
+    );
+  }
 };

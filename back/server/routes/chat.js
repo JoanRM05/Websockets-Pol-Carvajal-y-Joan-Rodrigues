@@ -54,22 +54,20 @@ module.exports = (wss) => {
           .status(404)
           .json({ success: false, message: "Usuari no trobat" });
       }
-      const user = data.usuarios.find((user) => user.id === emisorId);
-      const name = user.nombre;
       const message = {
         id: `m${Date.now()}`,
         salaId: "s1",
         emisorId,
-        emisorName: name,
+        emisorName: data.usuarios.find((u) => u.id === emisorId).nombre,
         contenido,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toLocaleString(),
       };
       data.mensajes.push(message);
       await writeChatData(data);
 
+      // Enviar el mensaje a todos los clientes conectados a través de WebSocket
       wss.clients.forEach((client) => {
         if (client.readyState === 1) {
-          // WebSocket.OPEN
           client.send(JSON.stringify(message));
         }
       });
@@ -80,15 +78,17 @@ module.exports = (wss) => {
         data: message,
       });
     } catch (error) {
-      return res.status(500).json({
-        success: false,
-        message: "Error en enviar el missatge",
-        error,
-      });
+      return res
+        .status(500)
+        .json({
+          success: false,
+          message: "Error en enviar el missatge",
+          error,
+        });
     }
   });
 
-  // Mantener SAVE_HIST y VIEW_HIST sin cambios
+  // Mantener SAVE_HIST sin cambios
   router.post("/save_hist", async (req, res) => {
     try {
       const data = await readChatData();
@@ -97,14 +97,17 @@ module.exports = (wss) => {
         .status(200)
         .json({ success: true, message: "Historial guardat amb èxit" });
     } catch (error) {
-      return res.status(500).json({
-        success: false,
-        message: "Error en guardar l’historial",
-        error,
-      });
+      return res
+        .status(500)
+        .json({
+          success: false,
+          message: "Error en guardar l’historial",
+          error,
+        });
     }
   });
 
+  // Modificar VIEW_HIST para el nuevo formato TXT
   router.get("/view_hist", async (req, res) => {
     const { format } = req.query;
 
@@ -115,9 +118,7 @@ module.exports = (wss) => {
       if (format === "txt") {
         const textContent = messages
           .map((msg) => {
-            const user = data.usuarios.find((u) => u.id === msg.emisorId);
-            const senderName = user ? user.nombre : msg.emisorId;
-            return `[${msg.timestamp}] ${senderName}: ${msg.contenido}`;
+            return `${msg.emisorName}: ${msg.contenido}`;
           })
           .join("\n");
         res.setHeader("Content-Type", "text/plain");
@@ -128,12 +129,6 @@ module.exports = (wss) => {
         return res.status(200).send(textContent);
       } else {
         res.setHeader("Content-Type", "application/json");
-        if (format === "json") {
-          res.setHeader(
-            "Content-Disposition",
-            'attachment; filename="chat_history.json"'
-          );
-        }
         return res.status(200).json({ success: true, messages });
       }
     } catch (error) {

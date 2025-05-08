@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Message, User, connectWebSocket, disconnectWebSocket, getChatHistory, sendMessage } from "../api/api";
+import { Message, User, connectWebSocket, disconnectWebSocket, getChatHistory, sendMessage, downloadChatHistory } from "../api/api";
 import "./Chat.css";
 
 interface ChatProps {
@@ -29,7 +29,6 @@ function Chat({ user }: ChatProps) {
     // Conectar WebSocket para recibir mensajes en tiempo real
     connectWebSocket((message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
-      console
     });
 
     // Desconectar al desmontar
@@ -40,8 +39,7 @@ function Chat({ user }: ChatProps) {
 
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop =
-        chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
@@ -55,6 +53,16 @@ function Chat({ user }: ChatProps) {
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Error en enviar el missatge"
+      );
+    }
+  };
+
+  const handleDownloadChat = async () => {
+    try {
+      await downloadChatHistory("txt"); // Puedes cambiar a "json" si prefieres
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Error al descargar el chat"
       );
     }
   };
@@ -95,6 +103,9 @@ function Chat({ user }: ChatProps) {
           Enviar
         </button>
       </form>
+      <button className="download-button" onClick={handleDownloadChat}>
+        Descargar Chat
+      </button>
     </div>
   );
 }
