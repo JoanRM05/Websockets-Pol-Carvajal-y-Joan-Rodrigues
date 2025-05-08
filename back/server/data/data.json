@@ -97,6 +97,20 @@
       "emisorId": "u1",
       "contenido": "sd",
       "timestamp": "2025-05-08T09:51:41.816Z"
+    },
+    {
+      "id": "m1746698008436",
+      "salaId": "s1",
+      "emisorId": "u2",
+      "contenido": "ds",
+      "timestamp": "2025-05-08T09:53:28.436Z"
+    },
+    {
+      "id": "m1746698029964",
+      "salaId": "s1",
+      "emisorId": "u1",
+      "contenido": "pepe",
+      "timestamp": "2025-05-08T09:53:49.964Z"
     }
   ]
 }

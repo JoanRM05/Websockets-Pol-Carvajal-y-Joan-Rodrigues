@@ -13,10 +13,10 @@ if (!fs.existsSync("data")) {
 }
 
 // Crear el servidor WebSocket
-const server = app.listen(process.env.PORT || 4000, () =>{
-  console.log(`Servidor escuchando en http://localhost:${server.address().port}`)
-}
-);
+const PORT = process.env.PORT || 4000;
+const server = app.listen(PORT, () => {
+  console.log(`Servidor escuchando en http://localhost:${PORT}`);
+});
 const wss = new WebSocketServer({ server });
 
 // Pasar wss a las rutas para que puedan usarlo
