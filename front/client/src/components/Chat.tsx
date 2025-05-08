@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Message, User, getChatHistory, sendMessage } from "../api/api";
+import { Message, User, connectWebSocket, sendWebSocketMessage, disconnectWebSocket, getChatHistory } from "../api/api";
 import "./Chat.css";
 
 interface ChatProps {
@@ -12,9 +12,9 @@ function Chat({ user }: ChatProps) {
   const [error, setError] = useState("");
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // Carregar l'historial quan es monta el component
   useEffect(() => {
-    const fetchMessages = async () => {
+    // Cargar historial inicial
+    const fetchInitialMessages = async () => {
       try {
         const history = await getChatHistory();
         setMessages(history);
@@ -24,10 +24,19 @@ function Chat({ user }: ChatProps) {
         );
       }
     };
-    fetchMessages();
+    fetchInitialMessages();
+
+    // Conectar WebSocket
+    connectWebSocket((message) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+    });
+
+    // Desconectar al desmontar
+    return () => {
+      disconnectWebSocket();
+    };
   }, []);
 
-  // Desplaçar al final quan els missatges canvien
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
@@ -35,13 +44,12 @@ function Chat({ user }: ChatProps) {
     }
   }, [messages]);
 
-  const handleSendMessage = async (e: React.FormEvent) => {
+  const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
 
     try {
-      const message = await sendMessage(user.id, newMessage);
-      setMessages([...messages, message]);
+      sendWebSocketMessage(user.id, newMessage);
       setNewMessage("");
     } catch (err) {
       setError(

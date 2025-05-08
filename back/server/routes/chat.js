@@ -2,10 +2,8 @@ const express = require("express");
 const fs = require("fs").promises;
 const router = express.Router();
 
-// Ruta del fitxer JSON
 const FILE_PATH = "data/data.json";
 
-// Funcions auxiliars
 async function readChatData() {
   try {
     const data = await fs.readFile(FILE_PATH, "utf-8");
@@ -14,20 +12,11 @@ async function readChatData() {
     const defaultData = {
       usuarios: [],
       salas: [
-        {
-          id: "s1",
-          nombre: "Sala General",
-          tipo: "publica",
-          participantes: [],
-        },
+        { id: "s1", nombre: "Sala General", tipo: "publica", participantes: [] },
       ],
       mensajes: [],
     };
-    await fs.writeFile(
-      FILE_PATH,
-      JSON.stringify(defaultData, null, 2),
-      "utf-8"
-    );
+    await fs.writeFile(FILE_PATH, JSON.stringify(defaultData, null, 2), "utf-8");
     return defaultData;
   }
 }
@@ -36,7 +25,7 @@ async function writeChatData(data) {
   await fs.writeFile(FILE_PATH, JSON.stringify(data, null, 2), "utf-8");
 }
 
-// Endpoint: Enviar i rebre missatges (SEND_MESSAGE)
+// Endpoint: Enviar i rebre missatges (SEND_MESSAGE) - Solo como respaldo
 router.post("/send_message", async (req, res) => {
   const { emisorId, contenido } = req.body;
 
@@ -66,7 +55,7 @@ router.post("/send_message", async (req, res) => {
     await writeChatData(data);
     return res.status(200).json({
       success: true,
-      message: "Missatge enviat amb èxit",
+      message: "Missatge enviat amb èxit (respaldo)",
       data: message,
     });
   } catch (error) {
@@ -76,7 +65,7 @@ router.post("/send_message", async (req, res) => {
   }
 });
 
-// Endpoint: Guardar l’historial (SAVE_HIST)
+// Mantener SAVE_HIST y VIEW_HIST sin cambios
 router.post("/save_hist", async (req, res) => {
   try {
     const data = await readChatData();
@@ -91,7 +80,6 @@ router.post("/save_hist", async (req, res) => {
   }
 });
 
-// Endpoint: Visualitzar i exportar l’historial (VIEW_HIST)
 router.get("/view_hist", async (req, res) => {
   const { format } = req.query;
 
@@ -100,7 +88,6 @@ router.get("/view_hist", async (req, res) => {
     const messages = data.mensajes.filter((msg) => msg.salaId === "s1");
 
     if (format === "txt") {
-      // Exportar com a text
       const textContent = messages
         .map((msg) => {
           const user = data.usuarios.find((u) => u.id === msg.emisorId);
@@ -115,7 +102,6 @@ router.get("/view_hist", async (req, res) => {
       );
       return res.status(200).send(textContent);
     } else {
-      // Exportar com a JSON (per defecte)
       res.setHeader("Content-Type", "application/json");
       if (format === "json") {
         res.setHeader(
