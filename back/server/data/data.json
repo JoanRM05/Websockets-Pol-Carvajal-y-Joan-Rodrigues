@@ -58,94 +58,45 @@
     },
     {
       "id": "m1746609224209",
-      "salaId": "s2",
+      "salaId": "s1",
       "emisorId": "u1",
       "contenido": "Hola a todos desde el profesor!",
       "timestamp": "2025-05-07T09:13:44.209Z"
     },
     {
-      "id": "m1746630565362",
+      "id": "m1746697771124",
       "salaId": "s1",
       "emisorId": "u2",
+      "contenido": "Hola profe",
+      "timestamp": "2025-05-08T09:49:31.124Z"
+    },
+    {
+      "id": "m1746697795068",
+      "salaId": "s1",
+      "emisorId": "u1",
+      "contenido": "hola guarra",
+      "timestamp": "2025-05-08T09:49:55.068Z"
+    },
+    {
+      "id": "m1746697847039",
+      "salaId": "s1",
+      "emisorId": "u2",
+      "contenido": "hola profe",
+      "timestamp": "2025-05-08T09:50:47.039Z"
+    },
+    {
+      "id": "m1746697883096",
+      "salaId": "s1",
+      "emisorId": "u2",
+      "contenido": "sddsd",
+      "timestamp": "2025-05-08T09:51:23.096Z"
+    },
+    {
+      "id": "m1746697901816",
+      "salaId": "s1",
+      "emisorId": "u1",
       "contenido": "sd",
-      "timestamp": "2025-05-07T15:09:25.362Z"
-    },
-    {
-      "id": "m1746630605720",
-      "salaId": "s1",
-      "emisorId": "u2",
-      "contenido": "asda",
-      "timestamp": "2025-05-07T15:10:05.720Z"
-    },
-    {
-      "id": "m1746630618298",
-      "salaId": "s1",
-      "emisorId": "u2",
-      "contenido": "sds",
-      "timestamp": "2025-05-07T15:10:18.298Z"
-    },
-    {
-      "id": "m1746632877463",
-      "salaId": "s1",
-      "emisorId": "u2",
-      "contenido": "sds",
-      "timestamp": "2025-05-07T15:47:57.463Z"
-    },
-    {
-      "id": "m1746632891023",
-      "salaId": "s1",
-      "emisorId": "u1",
-      "contenido": "s",
-      "timestamp": "2025-05-07T15:48:11.023Z"
-    },
-    {
-      "id": "m1746633002130",
-      "salaId": "s1",
-      "emisorId": "u2",
-      "contenido": "s",
-      "timestamp": "2025-05-07T15:50:02.130Z"
-    },
-    {
-      "id": "m1746692137570",
-      "salaId": "s1",
-      "emisorId": "u2",
-      "contenido": "s",
-      "timestamp": "2025-05-08T08:15:37.570Z"
-    },
-    {
-      "id": "m1746696013380",
-      "salaId": "s1",
-      "emisorId": "u2",
-      "contenido": "s",
-      "timestamp": "2025-05-08T09:20:13.380Z"
-    },
-    {
-      "id": "m1746696907653",
-      "salaId": "s1",
-      "emisorId": "u2",
-      "contenido": "asa",
-      "timestamp": "2025-05-08T09:35:07.653Z"
-    },
-    {
-      "id": "m1746696939393",
-      "salaId": "s1",
-      "emisorId": "u2",
-      "contenido": "profe",
-      "timestamp": "2025-05-08T09:35:39.393Z"
-    },
-    {
-      "id": "m1746696947439",
-      "salaId": "s1",
-      "emisorId": "u2",
-      "contenido": "puta dgt",
-      "timestamp": "2025-05-08T09:35:47.439Z"
-    },
-    {
-      "id": "m1746696991382",
-      "salaId": "s1",
-      "emisorId": "u1",
-      "contenido": "tu si que eres puta, ana",
-      "timestamp": "2025-05-08T09:36:31.382Z"
+      "timestamp": "2025-05-08T09:51:41.816Z"
     }
   ]
 }

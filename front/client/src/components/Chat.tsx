@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Message, User, connectWebSocket, sendWebSocketMessage, disconnectWebSocket, getChatHistory } from "../api/api";
+import { Message, User, connectWebSocket, disconnectWebSocket, getChatHistory, sendMessage } from "../api/api";
 import "./Chat.css";
 
 interface ChatProps {
@@ -26,7 +26,7 @@ function Chat({ user }: ChatProps) {
     };
     fetchInitialMessages();
 
-    // Conectar WebSocket
+    // Conectar WebSocket para recibir mensajes en tiempo real
     connectWebSocket((message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
@@ -44,12 +44,12 @@ function Chat({ user }: ChatProps) {
     }
   }, [messages]);
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
 
     try {
-      sendWebSocketMessage(user.id, newMessage);
+      await sendMessage(user.id, newMessage);
       setNewMessage("");
     } catch (err) {
       setError(

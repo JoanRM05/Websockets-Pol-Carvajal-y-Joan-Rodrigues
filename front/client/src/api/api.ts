@@ -16,7 +16,7 @@ export interface Message {
   timestamp: string;
 }
 
-// WebSocket
+// WebSocket para recibir mensajes
 let ws: WebSocket | null = null;
 
 export const connectWebSocket = (onMessage: (message: Message) => void) => {
@@ -24,22 +24,10 @@ export const connectWebSocket = (onMessage: (message: Message) => void) => {
   ws.onopen = () => console.log("Conexión WebSocket establecida");
   ws.onmessage = (event) => {
     const message = JSON.parse(event.data);
-    if (message.success === false) {
-      console.error(message.message);
-    } else {
-      onMessage(message);
-    }
+    onMessage(message);
   };
   ws.onerror = (error) => console.error("Error WebSocket:", error);
   ws.onclose = () => console.log("Conexión WebSocket cerrada");
-};
-
-export const sendWebSocketMessage = (emisorId: string, contenido: string) => {
-  if (ws && ws.readyState === WebSocket.OPEN) {
-    ws.send(JSON.stringify({ emisorId, contenido }));
-  } else {
-    console.error("WebSocket no está conectado");
-  }
 };
 
 export const disconnectWebSocket = () => {
@@ -49,7 +37,7 @@ export const disconnectWebSocket = () => {
   }
 };
 
-// Funciones REST existentes
+// Funciones REST
 export const login = async (gmail: string): Promise<User> => {
   const response = await axios.post(`${API_URL}/auth/login`, { gmail });
   if (response.data.success) {
