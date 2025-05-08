@@ -29,6 +29,7 @@ function Chat({ user }: ChatProps) {
     // Conectar WebSocket para recibir mensajes en tiempo real
     connectWebSocket((message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
+      console
     });
 
     // Desconectar al desmontar
@@ -74,7 +75,7 @@ function Chat({ user }: ChatProps) {
             >
               <p className="message-meta">
                 {new Date(msg.timestamp).toLocaleString()} -{" "}
-                {msg.emisorId === user.id ? "Tú" : msg.emisorId}
+                {msg.emisorId === user.id ? "Tú" : msg.emisorName}
               </p>
               <p>{msg.contenido}</p>
             </div>

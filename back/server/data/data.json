@@ -39,6 +39,7 @@
       "id": "m1",
       "salaId": "s1",
       "emisorId": "u2",
+      "emisorName": "Ana",
       "contenido": "Hola compañeros, ¿cómo están?",
       "timestamp": "2025-04-20T10:05:00"
     },
@@ -46,6 +47,7 @@
       "id": "m2",
       "salaId": "s1",
       "emisorId": "u2",
+      "emisorName": "Ana",
       "contenido": "Hola a todos, ¿trabajamos en el ejercicio juntos?",
       "timestamp": "2025-04-20T10:10:00"
     },
@@ -53,6 +55,7 @@
       "id": "m3",
       "salaId": "s1",
       "emisorId": "u3",
+      "emisorName": "Luis",
       "contenido": "Sí, perfecto. Empiezo con el login.",
       "timestamp": "2025-04-20T10:12:00"
     },
@@ -60,57 +63,9 @@
       "id": "m1746609224209",
       "salaId": "s1",
       "emisorId": "u1",
+      "emisorName": "Profesor",
       "contenido": "Hola a todos desde el profesor!",
       "timestamp": "2025-05-07T09:13:44.209Z"
-    },
-    {
-      "id": "m1746697771124",
-      "salaId": "s1",
-      "emisorId": "u2",
-      "contenido": "Hola profe",
-      "timestamp": "2025-05-08T09:49:31.124Z"
-    },
-    {
-      "id": "m1746697795068",
-      "salaId": "s1",
-      "emisorId": "u1",
-      "contenido": "hola guarra",
-      "timestamp": "2025-05-08T09:49:55.068Z"
-    },
-    {
-      "id": "m1746697847039",
-      "salaId": "s1",
-      "emisorId": "u2",
-      "contenido": "hola profe",
-      "timestamp": "2025-05-08T09:50:47.039Z"
-    },
-    {
-      "id": "m1746697883096",
-      "salaId": "s1",
-      "emisorId": "u2",
-      "contenido": "sddsd",
-      "timestamp": "2025-05-08T09:51:23.096Z"
-    },
-    {
-      "id": "m1746697901816",
-      "salaId": "s1",
-      "emisorId": "u1",
-      "contenido": "sd",
-      "timestamp": "2025-05-08T09:51:41.816Z"
-    },
-    {
-      "id": "m1746698008436",
-      "salaId": "s1",
-      "emisorId": "u2",
-      "contenido": "ds",
-      "timestamp": "2025-05-08T09:53:28.436Z"
-    },
-    {
-      "id": "m1746698029964",
-      "salaId": "s1",
-      "emisorId": "u1",
-      "contenido": "pepe",
-      "timestamp": "2025-05-08T09:53:49.964Z"
     }
   ]
 }

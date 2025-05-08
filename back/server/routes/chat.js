@@ -54,19 +54,22 @@ module.exports = (wss) => {
           .status(404)
           .json({ success: false, message: "Usuari no trobat" });
       }
+      const user = data.usuarios.find((user) => user.id === emisorId);
+      const name = user.nombre;
       const message = {
         id: `m${Date.now()}`,
         salaId: "s1",
         emisorId,
+        emisorName: name,
         contenido,
         timestamp: new Date().toISOString(),
       };
       data.mensajes.push(message);
       await writeChatData(data);
 
-      // Enviar el mensaje a todos los clientes conectados a través de WebSocket
       wss.clients.forEach((client) => {
-        if (client.readyState === 1) { // 1 = OPEN
+        if (client.readyState === 1) {
+          // WebSocket.OPEN
           client.send(JSON.stringify(message));
         }
       });
@@ -77,9 +80,11 @@ module.exports = (wss) => {
         data: message,
       });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ success: false, message: "Error en enviar el missatge", error });
+      return res.status(500).json({
+        success: false,
+        message: "Error en enviar el missatge",
+        error,
+      });
     }
   });
 
@@ -92,9 +97,11 @@ module.exports = (wss) => {
         .status(200)
         .json({ success: true, message: "Historial guardat amb èxit" });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ success: false, message: "Error en guardar l’historial", error });
+      return res.status(500).json({
+        success: false,
+        message: "Error en guardar l’historial",
+        error,
+      });
     }
   });
 

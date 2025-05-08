@@ -12,18 +12,16 @@ if (!fs.existsSync("data")) {
   fs.mkdirSync("data");
 }
 
-// Crear el servidor WebSocket
 const PORT = process.env.PORT || 4000;
 const server = app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
 const wss = new WebSocketServer({ server });
 
-// Pasar wss a las rutas para que puedan usarlo
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 
-const chatRoutes = require("./routes/chat")(wss); // Pasamos wss como argumento
+const chatRoutes = require("./routes/chat")(wss); 
 app.use("/api/chat", chatRoutes);
 
 wss.on("connection", (ws) => {

@@ -12,6 +12,7 @@ export interface Message {
   id: string;
   salaId: string;
   emisorId: string;
+  emisorName: string;
   contenido: string;
   timestamp: string;
 }
