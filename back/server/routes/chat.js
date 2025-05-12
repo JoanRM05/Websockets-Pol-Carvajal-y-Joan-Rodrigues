@@ -20,7 +20,32 @@ module.exports = (wss) => {
             participantes: [],
           },
         ],
-        mensajes: [],
+        mensajes: [
+          {
+            "id": "m1",
+            "salaId": "s1",
+            "emisorId": "u2",
+            "emisorName": "Ana",
+            "contenido": "Hola compañeros, ¿cómo están?",
+            "timestamp": "2025-04-20T10:05:00Z"
+          },
+          {
+            "id": "m2",
+            "salaId": "s1",
+            "emisorId": "u2",
+            "emisorName": "Ana",
+            "contenido": "Hola a todos, ¿trabajamos en el ejercicio juntos?",
+            "timestamp": "2025-04-20T10:10:00Z"
+          },
+          {
+            "id": "m3",
+            "salaId": "s1",
+            "emisorId": "u3",
+            "emisorName": "Luis",
+            "contenido": "Sí, perfecto. Empiezo con el login.",
+            "timestamp": "2025-04-20T10:12:00Z"
+          }
+        ],
       };
       await fs.writeFile(
         FILE_PATH,
@@ -33,6 +58,21 @@ module.exports = (wss) => {
 
   async function writeChatData(data) {
     await fs.writeFile(FILE_PATH, JSON.stringify(data, null, 2), "utf-8");
+  }
+
+  // Función para formatear la fecha en UTC
+  function formatTimestamp(date) {
+    return date.toISOString(); // "2025-05-08T16:01:18Z" (UTC)
+  }
+
+  // Función para formatear la fecha al estilo "Día dd/mm/aaaa"
+  function formatDateHeader(date) {
+    return `Día ${date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })}`;
+  }
+
+  // Función para formatear la hora al estilo "hh:mm:ss"
+  function formatTime(date) {
+    return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
   }
 
   // Endpoint: Enviar i rebre missatges (SEND_MESSAGE)
@@ -58,9 +98,9 @@ module.exports = (wss) => {
         id: `m${Date.now()}`,
         salaId: "s1",
         emisorId,
-        emisorName: data.usuarios.find((u) => u.id === emisorId).nombre,
+        emisorName: data.usuarios.find((u) => u.id === emisorId)?.nombre || emisorId,
         contenido,
-        timestamp: new Date().toLocaleString(),
+        timestamp: formatTimestamp(new Date()), // Usar formato UTC
       };
       data.mensajes.push(message);
       await writeChatData(data);
@@ -107,28 +147,52 @@ module.exports = (wss) => {
     }
   });
 
-  // Modificar VIEW_HIST para el nuevo formato TXT
+  // VIEW_HIST 
   router.get("/view_hist", async (req, res) => {
     const { format } = req.query;
 
     try {
       const data = await readChatData();
-      const messages = data.mensajes.filter((msg) => msg.salaId === "s1");
+      const messages = data.mensajes; 
 
       if (format === "txt") {
-        const textContent = messages
-          .map((msg) => {
-            return `${msg.emisorName}: ${msg.contenido}`;
-          })
-          .join("\n");
+        // Agrupar mensajes por fecha
+        const messagesByDate = {};
+        messages.forEach((msg) => {
+          const msgDate = new Date(msg.timestamp);
+          const dateKey = msgDate.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+          if (!messagesByDate[dateKey]) {
+            messagesByDate[dateKey] = [];
+          }
+          messagesByDate[dateKey].push(msg);
+        });
+
+        // Construir el contenido del archivo
+        let textContent = '';
+        for (const dateKey in messagesByDate) {
+          textContent += `Día ${dateKey}\n`;
+          messagesByDate[dateKey].forEach((msg) => {
+            const msgDate = new Date(msg.timestamp);
+            const time = formatTime(msgDate);
+            textContent += `${msg.emisorName} (${time}): ${msg.contenido}\n`;
+          });
+          textContent += '\n'; 
+        }
+
         res.setHeader("Content-Type", "text/plain");
         res.setHeader(
           "Content-Disposition",
           'attachment; filename="chat_history.txt"'
         );
-        return res.status(200).send(textContent);
+        return res.status(200).send(textContent.trim()); 
       } else {
         res.setHeader("Content-Type", "application/json");
+        if (format === "json") {
+          res.setHeader(
+            "Content-Disposition",
+            'attachment; filename="chat_history.json"'
+          );
+        }
         return res.status(200).json({ success: true, messages });
       }
     } catch (error) {

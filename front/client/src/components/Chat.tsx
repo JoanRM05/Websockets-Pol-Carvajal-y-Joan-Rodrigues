@@ -13,11 +13,20 @@ function Chat({ user }: ChatProps) {
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Cargar historial inicial
+    // Cargar historial inicial y filtrar mensajes del día actual
     const fetchInitialMessages = async () => {
       try {
         const history = await getChatHistory();
-        setMessages(history);
+        const today = new Date();
+        const filteredMessages = history.filter((msg) => {
+          const msgDate = new Date(msg.timestamp); // Parsear el formato ISO con "Z"
+          return (
+            msgDate.getDate() === today.getDate() &&
+            msgDate.getMonth() === today.getMonth() &&
+            msgDate.getFullYear() === today.getFullYear()
+          );
+        });
+        setMessages(filteredMessages);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Error en carregar l’historial"
@@ -26,9 +35,17 @@ function Chat({ user }: ChatProps) {
     };
     fetchInitialMessages();
 
-    // Conectar WebSocket para recibir mensajes en tiempo real
+    // Conectar WebSocket para recibir mensajes en tiempo real y filtrar
     connectWebSocket((message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
+      const today = new Date();
+      const msgDate = new Date(message.timestamp); // Parsear el formato ISO con "Z"
+      if (
+        msgDate.getDate() === today.getDate() &&
+        msgDate.getMonth() === today.getMonth() &&
+        msgDate.getFullYear() === today.getFullYear()
+      ) {
+        setMessages((prevMessages) => [...prevMessages, message]);
+      }
     });
 
     // Desconectar al desmontar
@@ -59,7 +76,7 @@ function Chat({ user }: ChatProps) {
 
   const handleDownloadChat = async () => {
     try {
-      await downloadChatHistory("txt"); // Puedes cambiar a "json" si prefieres
+      await downloadChatHistory("txt");
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Error al descargar el chat"
@@ -72,7 +89,7 @@ function Chat({ user }: ChatProps) {
       <h2 className="chat-title">Sala</h2>
       <div className="chat-container" ref={chatContainerRef}>
         {messages.length === 0 ? (
-          <p className="no-messages">No hay mensajes aún.</p>
+          <p className="no-messages">No hay mensajes aún hoy.</p>
         ) : (
           messages.map((msg) => (
             <div
