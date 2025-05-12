@@ -21,7 +21,6 @@ function Chat({ user }: ChatProps) {
   const [downloadFormat, setDownloadFormat] = useState<"txt" | "json">("txt");
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // Obtener la fecha actual en formato day/month/year
   const today = new Date();
   const formattedDate = today
     .toLocaleDateString("en-GB", {
@@ -105,7 +104,6 @@ function Chat({ user }: ChatProps) {
     }
   };
 
-  // Función para formatear solo la hora y los minutos
   const formatTime = (timestamp: string) => {
     return new Date(timestamp).toLocaleTimeString("es-ES", {
       hour: "2-digit",

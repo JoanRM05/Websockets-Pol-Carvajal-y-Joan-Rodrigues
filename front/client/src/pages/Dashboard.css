@@ -19,6 +19,7 @@
     width: 100%;
     max-width: 100%; 
     text-align: center;
+    padding-inline: 20px;
 }
 
 .dashboard-card h1 {
