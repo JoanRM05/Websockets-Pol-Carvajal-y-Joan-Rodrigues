@@ -136,7 +136,7 @@ module.exports = (wss) => {
   });
 
   // SAVE_HIST
-  router.post("/save_hist", async (req, res) => {
+  router.post("/save_hist", async (res) => {
     try {
       const data = await readChatData();
       await writeChatData(data);
@@ -160,7 +160,7 @@ module.exports = (wss) => {
 
     try {
       const data = await readChatData();
-      const messages = data.mensajes; // Incluir todos los mensajes sin filtro por fecha
+      const messages = data.mensajes;
 
       if (format === "txt") {
         // Agrupar mensajes por fecha
