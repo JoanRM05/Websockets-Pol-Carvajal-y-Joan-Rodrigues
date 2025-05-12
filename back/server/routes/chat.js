@@ -192,16 +192,16 @@ module.exports = (wss) => {
           "Content-Disposition",
           'attachment; filename="chat_history.txt"'
         );
-        return res.status(200).send(textContent.trim()); // Eliminar el último salto de línea extra
+        return res.status(200).send(textContent.trim()); 
       } else {
-        // Para JSON, formatear con indentación
+        
         res.setHeader("Content-Type", "application/json");
         if (format === "json") {
           res.setHeader(
             "Content-Disposition",
             'attachment; filename="chat_history.json"'
           );
-          const prettyJson = JSON.stringify({ success: true, messages }, null, 2); // Formatear con indentación
+          const prettyJson = JSON.stringify({ messages }, null, 2);
           return res.status(200).send(prettyJson);
         }
         return res.status(200).json({ success: true, messages });
