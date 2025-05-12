@@ -64,12 +64,7 @@ module.exports = (wss) => {
   function formatTimestamp(date) {
     return date.toISOString(); // "2025-05-08T16:01:18Z" (UTC)
   }
-
-  // Función para formatear la fecha al estilo "Día dd/mm/aaaa"
-  function formatDateHeader(date) {
-    return `Día ${date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })}`;
-  }
-
+  
   // Función para formatear la hora al estilo "hh:mm:ss"
   function formatTime(date) {
     return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
@@ -100,7 +95,7 @@ module.exports = (wss) => {
         emisorId,
         emisorName: data.usuarios.find((u) => u.id === emisorId)?.nombre || emisorId,
         contenido,
-        timestamp: formatTimestamp(new Date()), // Usar formato UTC
+        timestamp: formatTimestamp(new Date()),
       };
       data.mensajes.push(message);
       await writeChatData(data);
@@ -128,7 +123,7 @@ module.exports = (wss) => {
     }
   });
 
-  // Mantener SAVE_HIST sin cambios
+  // SAVE_HIST
   router.post("/save_hist", async (req, res) => {
     try {
       const data = await readChatData();
@@ -176,7 +171,7 @@ module.exports = (wss) => {
             const time = formatTime(msgDate);
             textContent += `${msg.emisorName} (${time}): ${msg.contenido}\n`;
           });
-          textContent += '\n'; 
+          textContent += '\n';
         }
 
         res.setHeader("Content-Type", "text/plain");
@@ -184,14 +179,17 @@ module.exports = (wss) => {
           "Content-Disposition",
           'attachment; filename="chat_history.txt"'
         );
-        return res.status(200).send(textContent.trim()); 
+        return res.status(200).send(textContent.trim());
       } else {
+        // Para JSON, formatear con indentación
         res.setHeader("Content-Type", "application/json");
         if (format === "json") {
           res.setHeader(
             "Content-Disposition",
             'attachment; filename="chat_history.json"'
           );
+          const prettyJson = JSON.stringify({ messages }, null, 2);
+          return res.status(200).send(prettyJson);
         }
         return res.status(200).json({ success: true, messages });
       }

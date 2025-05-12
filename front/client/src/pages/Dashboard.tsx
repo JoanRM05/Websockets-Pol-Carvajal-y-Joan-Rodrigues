@@ -25,7 +25,11 @@ function Dashboard() {
           Cerrar Sesión
         </button>
       </div>
-      <Chat user={user} />
+      <div className="dashboard-body">
+        <div></div>
+        <Chat user={user} />
+      </div>
+      
     </div>
   );
 }

@@ -5,6 +5,7 @@
     align-items: flex-start;
     padding: 20px; 
     box-sizing: border-box; 
+    height: 100vh;
 }
 
 .dashboard-card {
@@ -44,8 +45,15 @@
     color: #333;
 }
 
-.logout-button {
+.dashboard-body {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
     height: 100%;
+}
+
+.logout-button {
+    height: 50%;
     padding: 10px;
     background-color: #dc3545;
     color: white;

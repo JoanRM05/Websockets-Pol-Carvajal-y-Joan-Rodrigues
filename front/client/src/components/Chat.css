@@ -95,7 +95,6 @@
 }
 
 .download-button {
-    margin-top: 10px;
     padding: 10px 20px;
     background-color: #4CAF50;
     color: white;
@@ -108,6 +107,21 @@
 .download-button:hover {
     background-color: #45a049;
 }
+
+.download-section {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+  
+.download-format-select {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+}
+  
 
 /* Responsivitat */
 @media (max-width: 480px) {
