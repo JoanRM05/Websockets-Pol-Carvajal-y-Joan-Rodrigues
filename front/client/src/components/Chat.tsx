@@ -12,6 +12,13 @@ function Chat({ user }: ChatProps) {
   const [error, setError] = useState("");
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  }).split('/').join('/');
+
   useEffect(() => {
     // Cargar historial inicial y filtrar mensajes del día actual
     const fetchInitialMessages = async () => {
@@ -19,7 +26,7 @@ function Chat({ user }: ChatProps) {
         const history = await getChatHistory();
         const today = new Date();
         const filteredMessages = history.filter((msg) => {
-          const msgDate = new Date(msg.timestamp); // Parsear el formato ISO con "Z"
+          const msgDate = new Date(msg.timestamp);
           return (
             msgDate.getDate() === today.getDate() &&
             msgDate.getMonth() === today.getMonth() &&
@@ -38,7 +45,7 @@ function Chat({ user }: ChatProps) {
     // Conectar WebSocket para recibir mensajes en tiempo real y filtrar
     connectWebSocket((message) => {
       const today = new Date();
-      const msgDate = new Date(message.timestamp); // Parsear el formato ISO con "Z"
+      const msgDate = new Date(message.timestamp); 
       if (
         msgDate.getDate() === today.getDate() &&
         msgDate.getMonth() === today.getMonth() &&
@@ -86,7 +93,7 @@ function Chat({ user }: ChatProps) {
 
   return (
     <div className="chat-section">
-      <h2 className="chat-title">Sala</h2>
+      <h2 className="chat-title">Sala ({formattedDate})</h2>
       <div className="chat-container" ref={chatContainerRef}>
         {messages.length === 0 ? (
           <p className="no-messages">No hay mensajes aún hoy.</p>
