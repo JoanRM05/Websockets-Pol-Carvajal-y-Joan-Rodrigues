@@ -62,7 +62,7 @@ module.exports = (wss) => {
 
   // Función para formatear la fecha en UTC
   function formatTimestamp(date) {
-    return date.toISOString(); // "2025-05-08T16:01:18Z" (UTC)
+    return date.toISOString(); 
   }
 
   // Función para formatear la fecha al estilo "--- dd de Mes del aaaa ---"
@@ -74,7 +74,7 @@ module.exports = (wss) => {
     const day = date.getDate();
     const month = months[date.getMonth()];
     const year = date.getFullYear();
-    return `--- ${day} de ${month} del ${year} ---`;
+    return `--- ${day} de ${month} de ${year} ---`;
   }
 
   // Función para formatear la hora al estilo "hh:mm:ss"
@@ -107,7 +107,7 @@ module.exports = (wss) => {
         emisorId,
         emisorName: data.usuarios.find((u) => u.id === emisorId)?.nombre || emisorId,
         contenido,
-        timestamp: formatTimestamp(new Date()), // Usar formato UTC
+        timestamp: formatTimestamp(new Date()),
       };
       data.mensajes.push(message);
       await writeChatData(data);
@@ -135,7 +135,7 @@ module.exports = (wss) => {
     }
   });
 
-  // Mantener SAVE_HIST sin cambios
+  // SAVE_HIST
   router.post("/save_hist", async (req, res) => {
     try {
       const data = await readChatData();
@@ -154,7 +154,7 @@ module.exports = (wss) => {
     }
   });
 
-  // Modificar VIEW_HIST para descargar TODOS los mensajes con el formato deseado
+  // VIEW_HIST 
   router.get("/view_hist", async (req, res) => {
     const { format } = req.query;
 
@@ -167,7 +167,7 @@ module.exports = (wss) => {
         const messagesByDate = {};
         messages.forEach((msg) => {
           const msgDate = new Date(msg.timestamp);
-          const dateKey = msgDate.toISOString().split('T')[0]; // Agrupar por fecha (YYYY-MM-DD)
+          const dateKey = msgDate.toISOString().split('T')[0];
           if (!messagesByDate[dateKey]) {
             messagesByDate[dateKey] = [];
           }
@@ -184,7 +184,7 @@ module.exports = (wss) => {
             const time = formatTime(msgDate);
             textContent += `${msg.emisorName} (${time}): ${msg.contenido}\n`;
           });
-          textContent += '\n'; // Separador entre días
+          textContent += '\n';
         }
 
         res.setHeader("Content-Type", "text/plain");

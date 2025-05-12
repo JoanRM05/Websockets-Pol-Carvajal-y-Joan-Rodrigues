@@ -15,7 +15,7 @@ function Login() {
       localStorage.setItem("user", JSON.stringify(user));
       navigate("/dashboard");
     } catch (err) {
-      setError("Error en el login");
+      setError("Error en iniciar sesión. Por favor, verifica tu correo electrónico.");
     }
   };
 

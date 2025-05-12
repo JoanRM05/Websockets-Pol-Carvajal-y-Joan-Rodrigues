@@ -116,7 +116,10 @@ function Chat({ user }: ChatProps) {
 
   return (
     <div className="chat-section">
-      <h2 className="chat-title">SALA: {formattedDate}</h2>
+      <h2 className="chat-title">
+        <p> CHAT GENERAL </p>
+        <small style={{ fontSize: "17px" }}>{formattedDate}</small>
+      </h2>
       <div className="chat-container" ref={chatContainerRef}>
         {messages.length === 0 ? (
           <p className="no-messages">No hay mensajes aún hoy.</p>
@@ -129,8 +132,8 @@ function Chat({ user }: ChatProps) {
               }`}
             >
               <p className="message-meta">
-                <small>{formatTime(msg.timestamp)} - </small>
                 <b>{msg.emisorId === user.id ? "Tú" : msg.emisorName}</b>
+                <small> - {formatTime(msg.timestamp)}</small>
               </p>
               <p>{msg.contenido}</p>
             </div>
@@ -150,18 +153,19 @@ function Chat({ user }: ChatProps) {
           Enviar
         </button>
       </form>
+
       <div className="download-section">
+        <button className="download-button" onClick={handleDownloadChat}>
+          Descargar Chat
+        </button>
         <select
           value={downloadFormat}
           onChange={(e) => setDownloadFormat(e.target.value as "txt" | "json")}
           className="download-format-select"
         >
-          <option value="txt">Descargar como .txt</option>
-          <option value="json">Descargar como .json</option>
+          <option value="txt">.txt</option>
+          <option value="json">.json</option>
         </select>
-        <button className="download-button" onClick={handleDownloadChat}>
-          Descargar Chat
-        </button>
       </div>
     </div>
   );
