@@ -64,7 +64,19 @@ module.exports = (wss) => {
   function formatTimestamp(date) {
     return date.toISOString(); // "2025-05-08T16:01:18Z" (UTC)
   }
-  
+
+  // Función para formatear la fecha al estilo "--- dd de Mes del aaaa ---"
+  function formatDateHeader(date) {
+    const months = [
+      "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    return `--- ${day} de ${month} del ${year} ---`;
+  }
+
   // Función para formatear la hora al estilo "hh:mm:ss"
   function formatTime(date) {
     return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
@@ -95,7 +107,7 @@ module.exports = (wss) => {
         emisorId,
         emisorName: data.usuarios.find((u) => u.id === emisorId)?.nombre || emisorId,
         contenido,
-        timestamp: formatTimestamp(new Date()),
+        timestamp: formatTimestamp(new Date()), // Usar formato UTC
       };
       data.mensajes.push(message);
       await writeChatData(data);
@@ -123,7 +135,7 @@ module.exports = (wss) => {
     }
   });
 
-  // SAVE_HIST
+  // Mantener SAVE_HIST sin cambios
   router.post("/save_hist", async (req, res) => {
     try {
       const data = await readChatData();
@@ -142,20 +154,20 @@ module.exports = (wss) => {
     }
   });
 
-  // VIEW_HIST 
+  // Modificar VIEW_HIST para descargar TODOS los mensajes con el formato deseado
   router.get("/view_hist", async (req, res) => {
     const { format } = req.query;
 
     try {
       const data = await readChatData();
-      const messages = data.mensajes; 
+      const messages = data.mensajes; // Incluir todos los mensajes sin filtro por fecha
 
       if (format === "txt") {
         // Agrupar mensajes por fecha
         const messagesByDate = {};
         messages.forEach((msg) => {
           const msgDate = new Date(msg.timestamp);
-          const dateKey = msgDate.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+          const dateKey = msgDate.toISOString().split('T')[0]; // Agrupar por fecha (YYYY-MM-DD)
           if (!messagesByDate[dateKey]) {
             messagesByDate[dateKey] = [];
           }
@@ -165,13 +177,14 @@ module.exports = (wss) => {
         // Construir el contenido del archivo
         let textContent = '';
         for (const dateKey in messagesByDate) {
-          textContent += `Día ${dateKey}\n`;
+          const date = new Date(dateKey);
+          textContent += `${formatDateHeader(date)}\n`;
           messagesByDate[dateKey].forEach((msg) => {
             const msgDate = new Date(msg.timestamp);
             const time = formatTime(msgDate);
             textContent += `${msg.emisorName} (${time}): ${msg.contenido}\n`;
           });
-          textContent += '\n';
+          textContent += '\n'; // Separador entre días
         }
 
         res.setHeader("Content-Type", "text/plain");
@@ -179,7 +192,7 @@ module.exports = (wss) => {
           "Content-Disposition",
           'attachment; filename="chat_history.txt"'
         );
-        return res.status(200).send(textContent.trim());
+        return res.status(200).send(textContent.trim()); // Eliminar el último salto de línea extra
       } else {
         // Para JSON, formatear con indentación
         res.setHeader("Content-Type", "application/json");
@@ -188,7 +201,7 @@ module.exports = (wss) => {
             "Content-Disposition",
             'attachment; filename="chat_history.json"'
           );
-          const prettyJson = JSON.stringify({ messages }, null, 2);
+          const prettyJson = JSON.stringify({ success: true, messages }, null, 2); // Formatear con indentación
           return res.status(200).send(prettyJson);
         }
         return res.status(200).json({ success: true, messages });
