@@ -1,0 +1,154 @@
+.collaborative-doc-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    width: 100%;
+    max-width: 100%;
+    margin-right: 20px;
+    box-sizing: border-box;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .collaborative-doc-container h3 {
+    margin: 0 0 15px 0;
+    font-family: 'Arial', sans-serif;
+    font-size: 1.5rem;
+    color: #333;
+    width: 100%; 
+  }
+  
+  .doc-sidebar {
+    flex: 0 0 30%; 
+    display: flex;
+    flex-direction: column; 
+    gap: 10px;
+  }
+  
+  .doc-select {
+    display: flex;
+    flex-direction: column; 
+    gap: 10px;
+    max-height: calc(70vh - 120px); 
+    min-height: 57vh;
+    overflow-y: auto; 
+  }
+  
+  
+  .doc-controls {
+    display: flex;
+    flex-direction: column; 
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .doc-name-input {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    font-family: 'Arial', sans-serif;
+    width: 100%; 
+    box-sizing: border-box;
+  }
+  
+  .doc-name-input:focus {
+    border-color: #007bff;
+  }
+  
+  .create-doc-button,
+  .doc-button {
+    padding: 8px 16px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Arial', sans-serif;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    width: 100%; 
+    box-sizing: border-box;
+    text-align: left; 
+  }
+  
+  .create-doc-button {
+    background-color: #28a745;
+    color: white;
+    text-align: center; 
+  }
+  
+  .create-doc-button:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
+  }
+  
+  .doc-button {
+    background-color: #ddd;
+    color: #333;
+  }
+  
+  .doc-button:hover {
+    background-color: #ccc;
+  }
+  
+  .doc-button.active {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .doc-content {
+    flex: 0 0 70%; 
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .doc-textarea {
+    height: 100%; 
+    margin-top: 64px;
+    margin-right: 20px;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+    font-family: 'Arial', sans-serif;
+    outline: none;
+    box-sizing: border-box;
+    overflow-y: auto;
+    transition: border-color 0.3s ease;
+  }
+  
+  .doc-textarea:focus {
+    border-color: #007bff;
+  }
+  
+  .doc-placeholder {
+    font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+    color: #666;
+    margin: 0;
+  }
+  
+  /* Responsividad para pantallas pequeñas */
+  @media (max-width: 768px) {
+    .collaborative-doc-container {
+      flex-direction: column; 
+    }
+  
+    .doc-sidebar,
+    .doc-content {
+      flex: 1 1 100%;
+    }
+  
+    .create-doc-button,
+    .doc-button {
+      width: 100%;
+    }
+  
+    .doc-select {
+      max-height: calc(50vh - 80px); /* Altura ajustada para pantallas pequeñas */
+    }
+  }

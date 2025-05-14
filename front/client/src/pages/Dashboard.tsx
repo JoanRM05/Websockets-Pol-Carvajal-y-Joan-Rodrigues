@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Chat from "../components/Chat";
+import CollaborativeDoc from "../components/CollaborativeDoc";
 import { User } from "../types";
 import "./Dashboard.css";
 
@@ -26,10 +27,9 @@ function Dashboard() {
         </button>
       </div>
       <div className="dashboard-body">
-        <div></div>
+        <CollaborativeDoc user={user} />
         <Chat user={user} />
       </div>
-      
     </div>
   );
 }

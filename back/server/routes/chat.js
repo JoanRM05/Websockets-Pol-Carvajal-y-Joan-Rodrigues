@@ -22,29 +22,29 @@ module.exports = (wss) => {
         ],
         mensajes: [
           {
-            "id": "m1",
-            "salaId": "s1",
-            "emisorId": "u2",
-            "emisorName": "Ana",
-            "contenido": "Hola compañeros, ¿cómo están?",
-            "timestamp": "2025-04-20T10:05:00Z"
+            id: "m1",
+            salaId: "s1",
+            emisorId: "u2",
+            emisorName: "Ana",
+            contenido: "Hola compañeros, ¿cómo están?",
+            timestamp: "2025-04-20T10:05:00Z",
           },
           {
-            "id": "m2",
-            "salaId": "s1",
-            "emisorId": "u2",
-            "emisorName": "Ana",
-            "contenido": "Hola a todos, ¿trabajamos en el ejercicio juntos?",
-            "timestamp": "2025-04-20T10:10:00Z"
+            id: "m2",
+            salaId: "s1",
+            emisorId: "u2",
+            emisorName: "Ana",
+            contenido: "Hola a todos, ¿trabajamos en el ejercicio juntos?",
+            timestamp: "2025-04-20T10:10:00Z",
           },
           {
-            "id": "m3",
-            "salaId": "s1",
-            "emisorId": "u3",
-            "emisorName": "Luis",
-            "contenido": "Sí, perfecto. Empiezo con el login.",
-            "timestamp": "2025-04-20T10:12:00Z"
-          }
+            id: "m3",
+            salaId: "s1",
+            emisorId: "u3",
+            emisorName: "Luis",
+            contenido: "Sí, perfecto. Empiezo con el login.",
+            timestamp: "2025-04-20T10:12:00Z",
+          },
         ],
       };
       await fs.writeFile(
@@ -62,14 +62,24 @@ module.exports = (wss) => {
 
   // Función para formatear la fecha en UTC
   function formatTimestamp(date) {
-    return date.toISOString(); 
+    return date.toISOString();
   }
 
   // Función para formatear la fecha al estilo "--- dd de Mes del aaaa ---"
   function formatDateHeader(date) {
     const months = [
-      "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
     ];
     const day = date.getDate();
     const month = months[date.getMonth()];
@@ -79,7 +89,12 @@ module.exports = (wss) => {
 
   // Función para formatear la hora al estilo "hh:mm:ss"
   function formatTime(date) {
-    return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+    return date.toLocaleTimeString("es-ES", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    });
   }
 
   // Endpoint: Enviar i rebre missatges (SEND_MESSAGE)
@@ -105,7 +120,8 @@ module.exports = (wss) => {
         id: `m${Date.now()}`,
         salaId: "s1",
         emisorId,
-        emisorName: data.usuarios.find((u) => u.id === emisorId)?.nombre || emisorId,
+        emisorName:
+          data.usuarios.find((u) => u.id === emisorId)?.nombre || emisorId,
         contenido,
         timestamp: formatTimestamp(new Date()),
       };
@@ -125,18 +141,16 @@ module.exports = (wss) => {
         data: message,
       });
     } catch (error) {
-      return res
-        .status(500)
-        .json({
-          success: false,
-          message: "Error en enviar el missatge",
-          error,
-        });
+      return res.status(500).json({
+        success: false,
+        message: "Error en enviar el missatge",
+        error,
+      });
     }
   });
-
-  // SAVE_HIST
-  router.post("/save_hist", async (res) => {
+ 
+  // SAVE_HIST (Useless)
+  router.post("/save_hist", async (req, res) => {
     try {
       const data = await readChatData();
       await writeChatData(data);
@@ -144,17 +158,15 @@ module.exports = (wss) => {
         .status(200)
         .json({ success: true, message: "Historial guardat amb èxit" });
     } catch (error) {
-      return res
-        .status(500)
-        .json({
-          success: false,
-          message: "Error en guardar l’historial",
-          error,
-        });
+      return res.status(500).json({
+        success: false,
+        message: "Error en guardar l’historial",
+        error,
+      });
     }
   });
 
-  // VIEW_HIST 
+  // VIEW_HIST
   router.get("/view_hist", async (req, res) => {
     const { format } = req.query;
 
@@ -167,7 +179,7 @@ module.exports = (wss) => {
         const messagesByDate = {};
         messages.forEach((msg) => {
           const msgDate = new Date(msg.timestamp);
-          const dateKey = msgDate.toISOString().split('T')[0];
+          const dateKey = msgDate.toISOString().split("T")[0];
           if (!messagesByDate[dateKey]) {
             messagesByDate[dateKey] = [];
           }
@@ -175,7 +187,7 @@ module.exports = (wss) => {
         });
 
         // Construir el contenido del archivo
-        let textContent = '';
+        let textContent = "";
         for (const dateKey in messagesByDate) {
           const date = new Date(dateKey);
           textContent += `${formatDateHeader(date)}\n`;
@@ -184,7 +196,7 @@ module.exports = (wss) => {
             const time = formatTime(msgDate);
             textContent += `${msg.emisorName} (${time}): ${msg.contenido}\n`;
           });
-          textContent += '\n';
+          textContent += "\n";
         }
 
         res.setHeader("Content-Type", "text/plain");
@@ -192,9 +204,8 @@ module.exports = (wss) => {
           "Content-Disposition",
           'attachment; filename="chat_history.txt"'
         );
-        return res.status(200).send(textContent.trim()); 
+        return res.status(200).send(textContent.trim());
       } else {
-        
         res.setHeader("Content-Type", "application/json");
         if (format === "json") {
           res.setHeader(

@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import {
   Message,
   User,
-  connectWebSocket,
-  disconnectWebSocket,
+  connectChatWebSocket,
+  disconnectChatWebSocket,
   downloadChatHistory,
   getChatHistory,
   sendMessage,
@@ -55,7 +55,7 @@ function Chat({ user }: ChatProps) {
     fetchInitialMessages();
 
     // Conectar WebSocket para recibir mensajes en tiempo real y filtrar
-    connectWebSocket((message) => {
+    connectChatWebSocket((message) => {
       const today = new Date();
       const msgDate = new Date(message.timestamp);
       if (
@@ -69,7 +69,7 @@ function Chat({ user }: ChatProps) {
 
     // Desconectar al desmontar
     return () => {
-      disconnectWebSocket();
+      disconnectChatWebSocket();
     };
   }, []);
 
