@@ -71,7 +71,40 @@ const SharedFiles: React.FC = () => {
             ))}
           </ul>
         ) : (
-          <p className="text-sm text-gray-600">No hay archivos disponibles.</p>
+          <div className="empty-files-container">
+            <div className="empty-files-icon">
+              <svg
+                width="80"
+                height="80"
+                viewBox="0 0 80 80"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M48 8H16C12.6863 8 10 10.6863 10 14V66C10 69.3137 12.6863 72 16 72H64C67.3137 72 70 69.3137 70 66V30L48 8Z"
+                  fill="#E6F0FF"
+                  stroke="#007BFF"
+                  strokeWidth="2"
+                />
+                <path
+                  d="M48 8V24C48 27.3137 50.6863 30 54 30H70"
+                  stroke="#007BFF"
+                  strokeWidth="2"
+                />
+                <path
+                  d="M30 48H50M40 38V58"
+                  stroke="#007BFF"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+            <p className="empty-files-title">No hay archivos disponibles</p>
+            <p className="empty-files-description">
+              Sube tu primer archivo haciendo clic en el botón "Subir" o
+              arrastrando un archivo a la zona de carga.
+            </p>
+          </div>
         )}
       </div>
     </div>

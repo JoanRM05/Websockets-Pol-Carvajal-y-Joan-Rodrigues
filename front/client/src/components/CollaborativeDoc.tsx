@@ -228,7 +228,54 @@ function CollaborativeDoc({ user }: CollaborativeDocProps) {
           <p className="doc-placeholder">
             {selectedDoc
               ? "Conectando al documento colaborativo..."
-              : "Selecciona o crea un documento."}
+              : <div className="empty-doc-container">
+              <div className="empty-doc-icon">
+                <svg
+                  width="100"
+                  height="100"
+                  viewBox="0 0 100 100"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M70 15H25C21.1340 15 18 18.1340 18 22V78C18 81.8660 21.1340 85 25 85H75C78.8660 85 82 81.8660 82 78V27L70 15Z"
+                    fill="#E6F0FF"
+                    stroke="#007BFF"
+                    strokeWidth="2"
+                  />
+                  <path
+                    d="M70 15V22C70 24.7614 72.2386 27 75 27H82"
+                    stroke="#007BFF"
+                    strokeWidth="2"
+                  />
+                  <path
+                    d="M30 40H70M30 52H70M30 64H50"
+                    stroke="#007BFF"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                  <circle
+                    cx="62"
+                    cy="64"
+                    r="12"
+                    fill="#E6F0FF"
+                    stroke="#007BFF"
+                    strokeWidth="2"
+                  />
+                  <path
+                    d="M62 58V70M56 64H68"
+                    stroke="#007BFF"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </div>
+              <h3 className="empty-doc-title">No hay documentos seleccionados</h3>
+              <p className="empty-doc-description">
+                Crea un nuevo documento o selecciona uno existente para comenzar a editar.
+                Los documentos te permiten colaborar en tiempo real con otros usuarios.
+              </p>
+            </div>}
           </p>
         )}
       </div>

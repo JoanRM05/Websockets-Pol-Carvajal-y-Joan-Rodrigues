@@ -129,7 +129,8 @@
     font-size: 1rem;
     color: #666;
     margin: 0;
-    margin-top: 6%;
+    margin-right: 20px;
+    height: 100%;
   }
 
   .download-buttons {
@@ -157,6 +158,34 @@
     background-color: #0056b3;
   }
   
+  .empty-doc-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .empty-doc-icon {
+    margin-bottom: 1.5rem;
+  }
+  
+  .empty-doc-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  
+  .empty-doc-description {
+    color: #6c757d;
+    font-size: 1rem;
+    max-width: 400px;
+    line-height: 1.5;
+  }
+
   /* Responsividad para pantallas pequeñas */
   @media (max-width: 768px) {
     .collaborative-doc-container {
