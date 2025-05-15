@@ -90,17 +90,25 @@
       "emisorName": "Profesor",
       "contenido": "dfdf",
       "timestamp": "2025-05-15T10:09:01.784Z"
+    },
+    {
+      "id": "m1747304190806",
+      "salaId": "s1",
+      "emisorId": "u1",
+      "emisorName": "Profesor",
+      "contenido": "fdfd",
+      "timestamp": "2025-05-15T10:16:30.806Z"
+    },
+    {
+      "id": "m1747304192661",
+      "salaId": "s1",
+      "emisorId": "u2",
+      "emisorName": "Ana",
+      "contenido": "sfsfs",
+      "timestamp": "2025-05-15T10:16:32.661Z"
     }
   ],
   "documentos": [
-    {
-      "id": "d1747303616661",
-      "nombre": "df",
-      "contenido": "adadsa",
-      "editores": [
-        "u1",
-        "u2"
-      ]
-    }
+    
   ]
 }
