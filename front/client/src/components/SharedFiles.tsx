@@ -46,7 +46,27 @@ const SharedFiles: React.FC = () => {
 
   return (
     <div className="shared-files-container">
-      <h2>Archivos compartidos</h2>
+      <div className="title-container">
+        <h2>STUFILES</h2>
+        <button className="reload-button" onClick={fetchFiles}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="reload-icon"
+          >
+            <polyline points="23 4 23 10 17 10" />
+            <polyline points="1 20 1 14 7 14" />
+            <path d="M3.51 9a9 9 0 0114.13-3.36L23 10M1 14l5.36 5.36A9 9 0 0020.49 15" />
+          </svg>
+        </button>
+      </div>
 
       <div className="file-upload">
         <input

@@ -125,6 +125,64 @@
     cursor: pointer;
 }
   
+/* Nuevos estilos para el componente de chat vacío */
+.empty-chat-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 20px;
+}
+
+.chick-svg {
+    width: 160px;
+    height: 160px;
+    margin-bottom: 20px;
+}
+
+.empty-chat-message {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.empty-chat-subtext {
+    font-size: 14px;
+    color: #777;
+    text-align: center;
+}
+
+/* Animación para las notas musicales */
+.music-notes {
+    animation: float 2s infinite alternate ease-in-out;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Animación para el pollito */
+.chick-svg {
+    animation: bounce 3s infinite alternate ease-in-out;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-10px);
+    }
+}
+
 
 /* Responsivitat */
 @media (max-width: 480px) {

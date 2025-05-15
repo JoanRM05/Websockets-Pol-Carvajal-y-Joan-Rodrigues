@@ -115,12 +115,82 @@ function Chat({ user }: ChatProps) {
   return (
     <div className="chat-section">
       <h2 className="chat-title">
-        <p> CHAT GENERAL </p>
+        <p> STUCHAT </p>
         <small style={{ fontSize: "17px" }}>{formattedDate}</small>
       </h2>
       <div className="chat-container" ref={chatContainerRef}>
         {messages.length === 0 ? (
-          <p className="no-messages">No hay mensajes aún hoy.</p>
+          <div className="empty-chat-container">
+            <svg viewBox="0 0 200 200" className="chick-svg">
+              {/* Cuerpo del pollito */}
+              <ellipse cx="100" cy="120" rx="50" ry="45" fill="#FFEB3B" />
+
+              {/* Cabeza */}
+              <circle cx="100" cy="65" r="35" fill="#FFEB3B" />
+
+              {/* Ojos */}
+              <circle cx="85" cy="55" r="5" fill="#333" />
+              <circle cx="115" cy="55" r="5" fill="#333" />
+
+              {/* Pico */}
+              <polygon points="100,65 90,75 110,75" fill="#FF9800" />
+
+              {/* Alas */}
+              <ellipse
+                cx="55"
+                cy="120"
+                rx="15"
+                ry="25"
+                fill="#FFF59D"
+                transform="rotate(-20 55 120)"
+              />
+              <ellipse
+                cx="145"
+                cy="120"
+                rx="15"
+                ry="25"
+                fill="#FFF59D"
+                transform="rotate(20 145 120)"
+              />
+
+              {/* Patas */}
+              <rect x="85" cy="165" width="5" height="20" fill="#FF9800" />
+              <rect x="110" cy="165" width="5" height="20" fill="#FF9800" />
+
+              {/* Notas musicales */}
+              <g className="music-notes">
+                <path
+                  d="M150,30 Q155,20 160,30"
+                  stroke="#555"
+                  fill="transparent"
+                  strokeWidth="2"
+                />
+                <circle cx="160" cy="30" r="4" fill="#555" />
+
+                <path
+                  d="M165,45 Q170,35 175,45"
+                  stroke="#555"
+                  fill="transparent"
+                  strokeWidth="2"
+                />
+                <circle cx="175" cy="45" r="4" fill="#555" />
+
+                <path
+                  d="M140,15 Q145,5 150,15"
+                  stroke="#555"
+                  fill="transparent"
+                  strokeWidth="2"
+                />
+                <circle cx="150" cy="15" r="4" fill="#555" />
+              </g>
+            </svg>
+            <p className="empty-chat-message">
+              No hay mensajes en el chat hoy.
+            </p>
+            <p className="empty-chat-subtext">
+              ¡Sé el primero en iniciar la conversación!
+            </p>
+          </div>
         ) : (
           messages.map((msg) => (
             <div
