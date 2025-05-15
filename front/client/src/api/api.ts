@@ -171,3 +171,29 @@ export const saveDocument = async (docId: string): Promise<void> => {
     throw error;
   }
 };
+
+export const downloadDocument = async (
+  id: string,
+  format: "txt" | "pdf",
+  nombre: string
+) => {
+  const response = await axios.get(
+    `${API_URL}/doc/download/${id}?format=${format}`,
+    {
+      responseType: "blob",
+    }
+  );
+
+  const blob = new Blob([response.data], {
+    type: format === "pdf" ? "application/pdf" : "text/plain",
+  });
+
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${nombre}.${format}`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.URL.revokeObjectURL(url);
+};

@@ -4,6 +4,7 @@ import {
   connectDocWebSocket,
   createDocument,
   disconnectDocWebSocket,
+  downloadDocument,
   getDocument,
   saveDocument,
 } from "../api/api";
@@ -39,18 +40,22 @@ function CollaborativeDoc({ user }: CollaborativeDocProps) {
         document,
         documents: docList,
       } = data;
+
       if (type === "initDocs" && docList) {
         setDocuments(docList);
         if (docList.length > 0 && !selectedDoc) {
-          setSelectedDoc(docList[0]);
-          setContent(docList[0].contenido);
-          setLastSavedContent(docList[0].contenido);
+          const firstDoc = docList[0];
+          setSelectedDoc(firstDoc);
+          setContent(firstDoc.contenido);
+          setLastSavedContent(firstDoc.contenido);
         }
       }
+
       if (type === "initDoc" && docId && selectedDoc?.id === docId) {
         setContent(contenido);
         setLastSavedContent(contenido);
       }
+
       if (
         type === "update" &&
         docId &&
@@ -62,6 +67,7 @@ function CollaborativeDoc({ user }: CollaborativeDocProps) {
           prev.map((doc) => (doc.id === docId ? { ...doc, contenido } : doc))
         );
       }
+
       if (
         type === "newDoc" &&
         document &&
@@ -70,6 +76,7 @@ function CollaborativeDoc({ user }: CollaborativeDocProps) {
         setDocuments((prev) => [...prev, document]);
       }
     });
+
     setIsConnected(true);
 
     return () => {
@@ -102,6 +109,7 @@ function CollaborativeDoc({ user }: CollaborativeDocProps) {
       alert("Por favor, ingresa un nombre para el documento");
       return;
     }
+
     try {
       const newDoc = await createDocument(newDocName);
       setDocuments((prev) => [
@@ -127,6 +135,7 @@ function CollaborativeDoc({ user }: CollaborativeDocProps) {
         setDocuments((prev) =>
           prev.map((d) => (d.id === updatedDoc.id ? updatedDoc : d))
         );
+
         if (ws.current && ws.current.readyState === 1) {
           ws.current.send(
             JSON.stringify({ type: "requestDoc", docId: doc.id })
@@ -143,6 +152,7 @@ function CollaborativeDoc({ user }: CollaborativeDocProps) {
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newContent = e.target.value;
     setContent(newContent);
+
     if (ws.current && ws.current.readyState === 1 && selectedDoc) {
       ws.current.send(
         JSON.stringify({
@@ -152,6 +162,16 @@ function CollaborativeDoc({ user }: CollaborativeDocProps) {
           editorId: user.id,
         })
       );
+    }
+  };
+
+  const handleDownload = async (format: "txt" | "pdf") => {
+    if (selectedDoc) {
+      try {
+        await downloadDocument(selectedDoc.id, format, selectedDoc.nombre);
+      } catch (err) {
+        console.error("Error al descargar el documento:", err);
+      }
     }
   };
 
@@ -185,14 +205,25 @@ function CollaborativeDoc({ user }: CollaborativeDocProps) {
           ))}
         </div>
       </div>
+
       <div className="doc-content">
         {isConnected && selectedDoc ? (
-          <textarea
-            value={content}
-            onChange={handleContentChange}
-            className="doc-textarea"
-            placeholder="Escribe aquí..."
-          />
+          <>
+            <div className="download-buttons">
+              <button onClick={() => handleDownload("txt")}>
+                Descargar TXT
+              </button>
+              <button onClick={() => handleDownload("pdf")}>
+                Descargar PDF
+              </button>
+            </div>
+            <textarea
+              value={content}
+              onChange={handleContentChange}
+              className="doc-textarea"
+              placeholder="Escribe aquí..."
+            />
+          </>
         ) : (
           <p className="doc-placeholder">
             {selectedDoc

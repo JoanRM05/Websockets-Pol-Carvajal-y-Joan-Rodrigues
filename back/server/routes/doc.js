@@ -1,5 +1,8 @@
 const express = require("express");
 const fs = require("fs").promises;
+const path = require("path");
+const PDFDocument = require("pdfkit");
+
 const router = express.Router();
 
 module.exports = (docWss) => {
@@ -31,16 +34,14 @@ module.exports = (docWss) => {
     await fs.writeFile(FILE_PATH, JSON.stringify(data, null, 2), "utf-8");
   }
 
-  // Crear un nuevo documento con nombre
+  // Crear un nuevo documento
   router.post("/create", async (req, res) => {
     const { nombre } = req.body;
     if (!nombre) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "El nombre del documento es obligatorio",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "El nombre del documento es obligatorio",
+      });
     }
 
     try {
@@ -62,13 +63,11 @@ module.exports = (docWss) => {
 
       res.json({ success: true, document: newDoc });
     } catch (error) {
-      res
-        .status(500)
-        .json({
-          success: false,
-          message: "Error al crear el documento",
-          error,
-        });
+      res.status(500).json({
+        success: false,
+        message: "Error al crear el documento",
+        error,
+      });
     }
   });
 
@@ -78,17 +77,15 @@ module.exports = (docWss) => {
       const data = await readDocData();
       res.json({ success: true, documents: data.documentos });
     } catch (error) {
-      res
-        .status(500)
-        .json({
-          success: false,
-          message: "Error al obtener los documentos",
-          error,
-        });
+      res.status(500).json({
+        success: false,
+        message: "Error al obtener los documentos",
+        error,
+      });
     }
   });
 
-  // Obtener un documento específico
+  // Obtener documento específico
   router.get("/get/:id", async (req, res) => {
     const { id } = req.params;
     try {
@@ -101,13 +98,11 @@ module.exports = (docWss) => {
       }
       res.json({ success: true, document: doc });
     } catch (error) {
-      res
-        .status(500)
-        .json({
-          success: false,
-          message: "Error al obtener el documento",
-          error,
-        });
+      res.status(500).json({
+        success: false,
+        message: "Error al obtener el documento",
+        error,
+      });
     }
   });
 
@@ -115,13 +110,11 @@ module.exports = (docWss) => {
   router.post("/update/:id", async (req, res) => {
     const { id } = req.params;
     const { contenido, editorId } = req.body;
-    if (!contenido !== undefined || !editorId) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "contenido y editorId son obligatorios",
-        });
+    if (contenido === undefined || !editorId) {
+      return res.status(400).json({
+        success: false,
+        message: "contenido y editorId son obligatorios",
+      });
     }
 
     try {
@@ -132,7 +125,8 @@ module.exports = (docWss) => {
           .status(404)
           .json({ success: false, message: "Documento no encontrado" });
       }
-      doc.contenido = contenido; // Permitir contenido vacío
+
+      doc.contenido = contenido;
       if (!doc.editores.includes(editorId)) doc.editores.push(editorId);
       await writeDocData(data);
 
@@ -150,17 +144,15 @@ module.exports = (docWss) => {
         document: doc,
       });
     } catch (error) {
-      res
-        .status(500)
-        .json({
-          success: false,
-          message: "Error al actualizar el documento",
-          error,
-        });
+      res.status(500).json({
+        success: false,
+        message: "Error al actualizar el documento",
+        error,
+      });
     }
   });
 
-  // Endpoint SAVE_DOC
+  // Guardar documento (manual)
   router.post("/save_doc", async (req, res) => {
     const { docId } = req.body;
     if (!docId) {
@@ -179,17 +171,66 @@ module.exports = (docWss) => {
       await writeDocData(data);
       res.json({ success: true, message: "Documento guardado con éxito" });
     } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Error al guardar el documento",
+        error,
+      });
+    }
+  });
+
+  // DESCARGAR documento en txt o pdf
+  router.get("/download/:id", async (req, res) => {
+    const format = req.query.format; // 'txt' o 'pdf'
+    const { id } = req.params;
+
+    try {
+      const data = await readDocData();
+      const doc = data.documentos.find((d) => d.id === id);
+
+      if (!doc) {
+        return res.status(404).json({ error: "Documento no encontrado" });
+      }
+
+      const content = doc.contenido || "";
+
+      if (format === "txt") {
+        const fileName = `${doc.nombre || "documento"}.txt`;
+        res.setHeader(
+          "Content-Disposition",
+          `attachment; filename="${fileName}"`
+        );
+        res.setHeader("Content-Type", "text/plain");
+        res.send(content);
+      } else if (format === "pdf") {
+        const fileName = `${doc.nombre || "documento"}.pdf`;
+        res.setHeader(
+          "Content-Disposition",
+          `attachment; filename="${fileName}"`
+        );
+        res.setHeader("Content-Type", "application/pdf");
+
+        const pdfDoc = new PDFDocument();
+        pdfDoc.pipe(res);
+        pdfDoc.text(content);
+        pdfDoc.end();
+        
+      } else {
+        res
+          .status(400)
+          .json({ error: "Formato no soportado. Usa 'txt' o 'pdf'." });
+      }
+    } catch (error) {
       res
         .status(500)
         .json({
-          success: false,
-          message: "Error al guardar el documento",
-          error,
+          error: "Error al descargar el documento",
+          details: error.message,
         });
     }
   });
 
-  // WebSocket para sincronización en tiempo real
+  // WebSocket
   docWss.on("connection", async (ws) => {
     console.log("Cliente conectado al documento colaborativo");
 
@@ -202,7 +243,7 @@ module.exports = (docWss) => {
         const data = await readDocData();
         const doc = data.documentos.find((d) => d.id === docId);
         if (doc) {
-          doc.contenido = contenido; // Permitir contenido vacío
+          doc.contenido = contenido;
           if (!doc.editores.includes(editorId)) doc.editores.push(editorId);
           await writeDocData(data);
           docWss.clients.forEach((client) => {
@@ -228,6 +269,7 @@ module.exports = (docWss) => {
         }
       }
     });
+
     ws.on("close", () => console.log("Cliente desconectado del documento"));
   });
 
