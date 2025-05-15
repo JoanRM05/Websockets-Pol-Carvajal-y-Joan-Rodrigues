@@ -2,12 +2,14 @@ const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 const { WebSocketServer } = require("ws");
+const path = require("path");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+// Crear carpeta de datos si no existe
 if (!fs.existsSync("data")) {
   fs.mkdirSync("data");
 }
@@ -37,16 +39,23 @@ docWss.on("connection", (ws) => {
   );
 });
 
+// Rutas existentes
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 
 const chatRoutes = require("./routes/chat")(chatWss);
 app.use("/api/chat", chatRoutes);
 
-// Nueva ruta para el documento colaborativo
 const docRoutes = require("./routes/doc")(docWss);
 app.use("/api/doc", docRoutes);
 
+const fileRoutes = require("./routes/files");
+app.use("/api/files", fileRoutes);
+
+// Habilita la carpeta de archivos subidos para servir estáticamente si lo deseas
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// WebSocket upgrade
 server.on("upgrade", (request, socket, head) => {
   const pathname = new URL(request.url, `http://${request.headers.host}`)
     .pathname;

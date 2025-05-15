@@ -1,0 +1,134 @@
+.shared-files-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    margin-right: 20px;
+    width: 100%;
+    max-width: 480px;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .shared-files-container h2 {
+    margin: 0 0 20px 0;
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 600;
+  }
+  
+  .file-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  
+  .file-upload input[type="file"] {
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .file-upload input[type="file"]:focus {
+    border-color: #007bff;
+  }
+  
+  .file-upload button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+  }
+  
+  .file-upload button:disabled {
+    background-color: #8ab8ff;
+    cursor: not-allowed;
+  }
+  
+  .file-upload button:hover:not(:disabled) {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+  }
+  
+  .error-message {
+    color: #d9534f;
+    font-size: 0.875rem;
+    margin-bottom: 12px;
+  }
+  
+  .file-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+  }
+  
+  .file-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .file-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f7f9fc;
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    color: #333;
+    user-select: text;
+    word-break: break-all;
+  }
+  
+  .file-list li:last-child {
+    margin-bottom: 0;
+  }
+  
+  .file-list button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .file-list button:hover {
+    background-color: #e6f0ff;
+  }
+  
+  @media (max-width: 480px) {
+    .shared-files-container {
+      max-width: 100%;
+      padding: 16px;
+    }
+  
+    .file-upload {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .file-upload input[type="file"] {
+      width: 100%;
+    }
+  
+    .file-upload button {
+      width: 100%;
+    }
+  }
+  

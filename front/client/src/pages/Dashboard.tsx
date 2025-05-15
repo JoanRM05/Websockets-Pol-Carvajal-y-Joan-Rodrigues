@@ -3,6 +3,7 @@ import Chat from "../components/Chat";
 import CollaborativeDoc from "../components/CollaborativeDoc";
 import { User } from "../types";
 import "./Dashboard.css";
+import SharedFiles from "../components/SharedFiles";
 
 function Dashboard() {
   const user: User | null = JSON.parse(localStorage.getItem("user") || "null");
@@ -28,6 +29,7 @@ function Dashboard() {
       </div>
       <div className="dashboard-body">
         <CollaborativeDoc user={user} />
+        <SharedFiles />
         <Chat user={user} />
       </div>
     </div>

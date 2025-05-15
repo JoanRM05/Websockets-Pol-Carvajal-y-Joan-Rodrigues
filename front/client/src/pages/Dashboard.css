@@ -5,7 +5,7 @@
     align-items: flex-start;
     padding: 20px; 
     box-sizing: border-box; 
-    height: 100vh;
+    height: 100%;
 }
 
 .dashboard-card {

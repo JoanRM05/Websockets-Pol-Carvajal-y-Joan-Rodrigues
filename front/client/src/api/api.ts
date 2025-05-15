@@ -2,7 +2,6 @@ import axios from "axios";
 
 const API_URL = "http://localhost:4000/api";
 
-// Interfaces existentes
 export interface User {
   id: string;
   nombre: string;
@@ -196,4 +195,59 @@ export const downloadDocument = async (
   link.click();
   link.remove();
   window.URL.revokeObjectURL(url);
+};
+
+
+export const uploadFile = async (file: File): Promise<void> => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    await axios.post(`${API_URL}/files/upload`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  } catch (error) {
+    console.error("Error al subir archivo:", error);
+    throw error;
+  }
+};
+
+/**
+ * Obtener la lista de archivos disponibles
+ */
+export const listFiles = async (): Promise<string[]> => {
+  try {
+    const response = await axios.get(`${API_URL}/files/list`);
+    return response.data.files; // se espera que devuelva { files: ["archivo1.txt", "archivo2.pdf", ...] }
+  } catch (error) {
+    console.error("Error al listar archivos:", error);
+    throw error;
+  }
+};
+
+/**
+ * Descargar un archivo por nombre
+ */
+export const downloadFile = async (filename: string): Promise<void> => {
+  try {
+    const response = await axios.get(`${API_URL}/files/download/${filename}`, {
+      responseType: "blob",
+    });
+
+    const blob = new Blob([response.data]);
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Error al descargar archivo:", error);
+    throw error;
+  }
 };
