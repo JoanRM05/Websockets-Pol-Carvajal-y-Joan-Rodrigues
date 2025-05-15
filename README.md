@@ -1,6 +1,6 @@
 # 📦 Chat en tiempo real + Documento colaborativo + Gestion de archivos 
 
-
+Esta aplicación permite la comunicación en tiempo real a través de salas de chat, la creación de documentos colaborativos entre usuarios y la posibilidad de consultar y descargar el historial tanto de las conversaciones como de los documentos generados. Es una herramienta ideal para equipos que necesitan colaborar de forma ágil, centralizada y eficiente.
 
 ---
 
@@ -21,9 +21,11 @@
 
 Lista de funcionalidades implementadas en el proyecto:
 
-- [ ] Funcionalidad 1: _Descripción corta_
-- [ ] Funcionalidad 2: _Descripción corta_
-- [ ] Funcionalidad 3: _Descripción corta_
+- [ ] Registro y acceso: inicio de sesión con validación
+- [ ] Mensajería en tiempo real: uso de WebSockets para sincronizar mensajes
+- [ ] Compartición de archivos: subida y descarga dentro de la sala
+- [ ] Historial descargable: exportación en .txt o .json
+- [ ] Documento colaborativo integrado: creación y edición simultánea por parte de la pareja, sincronizado en tiempo real
 
 ---
 
@@ -31,23 +33,13 @@ Lista de funcionalidades implementadas en el proyecto:
 
 Tecnologías y herramientas utilizadas en este proyecto:
 
-- Lenguaje(s): `Ej. JavaScript / TypeScript / Python`
-- Framework(s): `Ej. React / Node.js / Django`
-- Base de datos: `Ej. PostgreSQL / MongoDB`
-- Otros: `Ej. Docker / TailwindCSS / Redux`
+- Frontend: React
+- Backend: Node.js + Express
+- Base de datos: JSON
+- AJAX: Axios
 
 ---
 
 ## 🚀 Instalación
 
-Pasos para instalar las dependencias del proyecto:
 
-```bash
-# Instalar dependencias del cliente
-cd cliente
-npm install
-
-# Instalar dependencias del servidor
-cd ../servidor
-npm install
-```
