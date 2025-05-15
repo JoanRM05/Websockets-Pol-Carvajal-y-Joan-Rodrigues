@@ -3,15 +3,24 @@ import { downloadFile, listFiles, uploadFile } from "../api/api";
 import "./SharedFiles.css";
 
 const SharedFiles: React.FC = () => {
+  // Estado que almacena la lista de nombres de archivos disponibles
   const [files, setFiles] = useState<string[]>([]);
+  // Estado para guardar el archivo seleccionado para subir
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  // Estado que indica si se está realizando una subida (loading)
   const [uploading, setUploading] = useState(false);
+  // Estado para almacenar mensajes de error en la UI
   const [error, setError] = useState<string | null>(null);
 
+  // Efecto para cargar la lista de archivos al montar el componente
   useEffect(() => {
     fetchFiles();
   }, []);
 
+  /**
+   * Función que obtiene la lista de archivos del backend y actualiza el estado.
+   * En caso de error, establece un mensaje de error.
+   */
   const fetchFiles = async () => {
     try {
       const fileList = await listFiles();
@@ -21,10 +30,17 @@ const SharedFiles: React.FC = () => {
     }
   };
 
+  /**
+   * Función que maneja la subida de archivos seleccionados.
+   * Desactiva la subida si no hay archivo seleccionado.
+   * Actualiza el estado de carga y muestra errores en caso de fallo.
+   * Refresca la lista de archivos tras la subida exitosa.
+   */
   const handleUpload = async () => {
     if (!selectedFile) return;
     setUploading(true);
     setError(null);
+
     try {
       await uploadFile(selectedFile);
       setSelectedFile(null);
@@ -36,6 +52,11 @@ const SharedFiles: React.FC = () => {
     }
   };
 
+  /**
+   * Función que maneja la descarga de un archivo.
+   * Recibe el nombre del archivo a descargar.
+   * Muestra error si la descarga falla.
+   */
   const handleDownload = async (filename: string) => {
     try {
       await downloadFile(filename);
@@ -46,9 +67,14 @@ const SharedFiles: React.FC = () => {
 
   return (
     <div className="shared-files-container">
+      {/* Título y botón para recargar la lista de archivos */}
       <div className="title-container">
         <h2>STUFILES</h2>
-        <button className="reload-button" onClick={fetchFiles}>
+        <button
+          className="reload-button"
+          onClick={fetchFiles}
+          title="Recargar archivos"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -68,29 +94,43 @@ const SharedFiles: React.FC = () => {
         </button>
       </div>
 
+      {/* Sección para selección y subida de archivo */}
       <div className="file-upload">
         <input
           type="file"
           onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+          aria-label="Seleccionar archivo para subir"
         />
-        <button onClick={handleUpload} disabled={!selectedFile || uploading}>
+        <button
+          onClick={handleUpload}
+          disabled={!selectedFile || uploading}
+          aria-disabled={!selectedFile || uploading}
+        >
           {uploading ? "Subiendo..." : "Subir"}
         </button>
       </div>
 
+      {/* Muestra mensaje de error si existe */}
       {error && <p className="error-message">{error}</p>}
 
+      {/* Lista de archivos disponibles para descarga */}
       <div className="file-list">
         {files.length > 0 ? (
           <ul>
             {files.map((file) => (
               <li key={file}>
                 <span>{file}</span>
-                <button onClick={() => handleDownload(file)}>Descargar</button>
+                <button
+                  onClick={() => handleDownload(file)}
+                  aria-label={`Descargar archivo ${file}`}
+                >
+                  Descargar
+                </button>
               </li>
             ))}
           </ul>
         ) : (
+          // Contenido mostrado cuando no hay archivos
           <div className="empty-files-container">
             <div className="empty-files-icon">
               <svg

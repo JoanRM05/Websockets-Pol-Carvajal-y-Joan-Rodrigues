@@ -10,17 +10,28 @@ import {
 } from "../api/api";
 import "./Chat.css";
 
+// Props del componente Chat
 interface ChatProps {
   user: User;
 }
 
 function Chat({ user }: ChatProps) {
+  // Estado para los mensajes del día actual
   const [messages, setMessages] = useState<Message[]>([]);
+
+  // Estado para el nuevo mensaje a enviar
   const [newMessage, setNewMessage] = useState("");
+
+  // Estado para errores
   const [error, setError] = useState("");
+
+  // Estado para el formato de descarga del historial
   const [downloadFormat, setDownloadFormat] = useState<"txt" | "json">("txt");
+
+  // Referencia al contenedor del chat para hacer scroll automático
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
+  // Fecha formateada (dd/mm/yyyy)
   const today = new Date();
   const formattedDate = today
     .toLocaleDateString("en-GB", {
@@ -31,12 +42,18 @@ function Chat({ user }: ChatProps) {
     .split("/")
     .join("/");
 
+  /**
+   * useEffect para:
+   * - Cargar historial de mensajes del día actual.
+   * - Establecer conexión WebSocket para recibir nuevos mensajes en tiempo real.
+   * - Limpiar la conexión WebSocket al desmontar el componente.
+   */
   useEffect(() => {
-    // Cargar historial inicial y filtrar mensajes del día actual
     const fetchInitialMessages = async () => {
       try {
         const history = await getChatHistory();
         const today = new Date();
+        // Filtrar mensajes del día actual
         const filteredMessages = history.filter((msg) => {
           const msgDate = new Date(msg.timestamp);
           return (
@@ -52,12 +69,14 @@ function Chat({ user }: ChatProps) {
         );
       }
     };
+
     fetchInitialMessages();
 
-    // Conectar WebSocket para recibir mensajes en tiempo real y filtrar
+    // Conectar WebSocket para recibir mensajes en tiempo real
     connectChatWebSocket((message) => {
       const today = new Date();
       const msgDate = new Date(message.timestamp);
+      // Aceptar solo mensajes del día actual
       if (
         msgDate.getDate() === today.getDate() &&
         msgDate.getMonth() === today.getMonth() &&
@@ -67,12 +86,16 @@ function Chat({ user }: ChatProps) {
       }
     });
 
-    // Desconectar al desmontar
+    // Desconectar WebSocket al desmontar
     return () => {
       disconnectChatWebSocket();
     };
   }, []);
 
+  /**
+   * useEffect para hacer scroll automático hacia el final del chat
+   * cada vez que se actualizan los mensajes.
+   */
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
@@ -80,6 +103,9 @@ function Chat({ user }: ChatProps) {
     }
   }, [messages]);
 
+  /**
+   * Maneja el envío de un nuevo mensaje
+   */
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
@@ -94,6 +120,9 @@ function Chat({ user }: ChatProps) {
     }
   };
 
+  /**
+   * Maneja la descarga del historial del chat
+   */
   const handleDownloadChat = async () => {
     try {
       await downloadChatHistory(downloadFormat);
@@ -104,6 +133,9 @@ function Chat({ user }: ChatProps) {
     }
   };
 
+  /**
+   * Formatea la hora desde un timestamp ISO
+   */
   const formatTime = (timestamp: string) => {
     return new Date(timestamp).toLocaleTimeString("es-ES", {
       hour: "2-digit",
@@ -114,27 +146,28 @@ function Chat({ user }: ChatProps) {
 
   return (
     <div className="chat-section">
+      {/* Título del chat y fecha actual */}
       <h2 className="chat-title">
         <p> STUCHAT </p>
         <small style={{ fontSize: "17px" }}>{formattedDate}</small>
       </h2>
+
+      {/* Contenedor principal del chat */}
       <div className="chat-container" ref={chatContainerRef}>
         {messages.length === 0 ? (
+          // Mensaje cuando no hay mensajes aún
           <div className="empty-chat-container">
+            {/* SVG decorativo (pollito con notas musicales) */}
             <svg viewBox="0 0 200 200" className="chick-svg">
               {/* Cuerpo del pollito */}
               <ellipse cx="100" cy="120" rx="50" ry="45" fill="#FFEB3B" />
-
               {/* Cabeza */}
               <circle cx="100" cy="65" r="35" fill="#FFEB3B" />
-
               {/* Ojos */}
               <circle cx="85" cy="55" r="5" fill="#333" />
               <circle cx="115" cy="55" r="5" fill="#333" />
-
               {/* Pico */}
               <polygon points="100,65 90,75 110,75" fill="#FF9800" />
-
               {/* Alas */}
               <ellipse
                 cx="55"
@@ -152,12 +185,10 @@ function Chat({ user }: ChatProps) {
                 fill="#FFF59D"
                 transform="rotate(20 145 120)"
               />
-
               {/* Patas */}
-              <rect x="85" cy="165" width="5" height="20" fill="#FF9800" />
-              <rect x="110" cy="165" width="5" height="20" fill="#FF9800" />
-
-              {/* Notas musicales */}
+              <rect x="85" y="165" width="5" height="20" fill="#FF9800" />
+              <rect x="110" y="165" width="5" height="20" fill="#FF9800" />
+              {/* Notas musicales flotando */}
               <g className="music-notes">
                 <path
                   d="M150,30 Q155,20 160,30"
@@ -166,7 +197,6 @@ function Chat({ user }: ChatProps) {
                   strokeWidth="2"
                 />
                 <circle cx="160" cy="30" r="4" fill="#555" />
-
                 <path
                   d="M165,45 Q170,35 175,45"
                   stroke="#555"
@@ -174,7 +204,6 @@ function Chat({ user }: ChatProps) {
                   strokeWidth="2"
                 />
                 <circle cx="175" cy="45" r="4" fill="#555" />
-
                 <path
                   d="M140,15 Q145,5 150,15"
                   stroke="#555"
@@ -192,6 +221,7 @@ function Chat({ user }: ChatProps) {
             </p>
           </div>
         ) : (
+          // Mostrar mensajes del chat
           messages.map((msg) => (
             <div
               key={msg.id}
@@ -208,7 +238,11 @@ function Chat({ user }: ChatProps) {
           ))
         )}
       </div>
+
+      {/* Mostrar errores, si los hay */}
       {error && <p className="error-message">{error}</p>}
+
+      {/* Formulario para enviar nuevos mensajes */}
       <form className="chat-form" onSubmit={handleSendMessage}>
         <input
           type="text"
@@ -222,6 +256,7 @@ function Chat({ user }: ChatProps) {
         </button>
       </form>
 
+      {/* Sección de descarga del historial */}
       <div className="download-section">
         <button className="download-button" onClick={handleDownloadChat}>
           Descargar Chat

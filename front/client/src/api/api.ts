@@ -2,6 +2,7 @@ import axios from "axios";
 
 const API_URL = "http://localhost:4000/api";
 
+// Interfaces de tipos para los datos utilizados en la aplicación
 export interface User {
   id: string;
   nombre: string;
@@ -24,23 +25,33 @@ export interface Document {
   editores: string[];
 }
 
-// WebSocket para chat
+// -------------------- WebSocket para Chat --------------------
+
 let chatWs: WebSocket | null = null;
 
-// Conectar WebSocket para chat
+/**
+ * Establece la conexión WebSocket para el chat.
+ * @param onMessage Función que se ejecuta al recibir un mensaje.
+ */
 export const connectChatWebSocket = (onMessage: (message: Message) => void) => {
   chatWs = new WebSocket("ws://localhost:4000");
+
   chatWs.onopen = () => console.log("Conexión WebSocket para chat establecida");
+
   chatWs.onmessage = (event) => {
     const message = JSON.parse(event.data);
     onMessage(message);
   };
+
   chatWs.onerror = (error) =>
     console.error("Error WebSocket para chat:", error);
+
   chatWs.onclose = () => console.log("Conexión WebSocket para chat cerrada");
 };
 
-// Desconectar WebSocket para chat
+/**
+ * Cierra la conexión WebSocket para el chat.
+ */
 export const disconnectChatWebSocket = () => {
   if (chatWs) {
     chatWs.close();
@@ -48,31 +59,50 @@ export const disconnectChatWebSocket = () => {
   }
 };
 
-// Conectar WebSocket para documentos
+// -------------------- WebSocket para Documentos --------------------
+
+/**
+ * Establece la conexión WebSocket para documentos colaborativos.
+ * @param onMessage Función que se ejecuta al recibir datos del documento.
+ * @returns WebSocket activo
+ */
 export const connectDocWebSocket = (
   onMessage: (data: any) => void
 ): WebSocket => {
   const ws = new WebSocket("ws://localhost:4000/doc");
+
   ws.onopen = () =>
     console.log("Conexión WebSocket para documentos establecida");
+
   ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
     onMessage(data);
   };
+
   ws.onerror = (error) =>
     console.error("Error WebSocket para documentos:", error);
+
   ws.onclose = () => console.log("Conexión WebSocket para documentos cerrada");
+
   return ws;
 };
 
-// Desconectar WebSocket para documentos
+/**
+ * Cierra una conexión WebSocket de documento.
+ * @param ws WebSocket a cerrar
+ */
 export const disconnectDocWebSocket = (ws: WebSocket | null) => {
   if (ws) {
     ws.close();
   }
 };
 
-// Funciones REST existentes
+// -------------------- Autenticación --------------------
+
+/**
+ * Inicia sesión con el correo de Gmail y devuelve los datos del usuario.
+ * @param gmail Correo electrónico del usuario
+ */
 export const login = async (gmail: string): Promise<User> => {
   const response = await axios.post(`${API_URL}/auth/login`, { gmail });
   if (response.data.success) {
@@ -81,6 +111,13 @@ export const login = async (gmail: string): Promise<User> => {
   throw new Error(response.data.message || "Error en iniciar sessió");
 };
 
+// -------------------- Chat --------------------
+
+/**
+ * Envía un mensaje al servidor.
+ * @param emisorId ID del emisor
+ * @param contenido Texto del mensaje
+ */
 export const sendMessage = async (
   emisorId: string,
   contenido: string
@@ -95,6 +132,9 @@ export const sendMessage = async (
   throw new Error(response.data.message || "Error en enviar el missatge");
 };
 
+/**
+ * Obtiene el historial de mensajes del chat.
+ */
 export const getChatHistory = async (): Promise<Message[]> => {
   const response = await axios.get(`${API_URL}/chat/view_hist`);
   if (response.data.success) {
@@ -103,6 +143,10 @@ export const getChatHistory = async (): Promise<Message[]> => {
   throw new Error(response.data.message || "Error en recuperar l’historial");
 };
 
+/**
+ * Descarga el historial del chat en formato `.txt` o `.json`.
+ * @param format Formato del archivo (por defecto es `txt`)
+ */
 export const downloadChatHistory = async (
   format: "txt" | "json" = "txt"
 ): Promise<void> => {
@@ -131,7 +175,11 @@ export const downloadChatHistory = async (
   }
 };
 
-// Funciones REST para documentos
+// -------------------- Documentos --------------------
+
+/**
+ * Obtiene la lista de documentos disponibles.
+ */
 export const getDocuments = async (): Promise<Document[]> => {
   try {
     const response = await axios.get(`${API_URL}/doc/list`);
@@ -142,6 +190,10 @@ export const getDocuments = async (): Promise<Document[]> => {
   }
 };
 
+/**
+ * Crea un nuevo documento.
+ * @param nombre Nombre del nuevo documento
+ */
 export const createDocument = async (nombre: string): Promise<Document> => {
   try {
     const response = await axios.post(`${API_URL}/doc/create`, { nombre });
@@ -152,6 +204,10 @@ export const createDocument = async (nombre: string): Promise<Document> => {
   }
 };
 
+/**
+ * Obtiene un documento por su ID.
+ * @param id ID del documento
+ */
 export const getDocument = async (id: string): Promise<Document> => {
   try {
     const response = await axios.get(`${API_URL}/doc/get/${id}`);
@@ -162,6 +218,10 @@ export const getDocument = async (id: string): Promise<Document> => {
   }
 };
 
+/**
+ * Guarda el documento actual en el servidor.
+ * @param docId ID del documento a guardar
+ */
 export const saveDocument = async (docId: string): Promise<void> => {
   try {
     await axios.post(`${API_URL}/doc/save_doc`, { docId });
@@ -171,6 +231,12 @@ export const saveDocument = async (docId: string): Promise<void> => {
   }
 };
 
+/**
+ * Descarga un documento en formato `.txt` o `.pdf`.
+ * @param id ID del documento
+ * @param format Formato de descarga (txt o pdf)
+ * @param nombre Nombre del archivo descargado
+ */
 export const downloadDocument = async (
   id: string,
   format: "txt" | "pdf",
@@ -197,7 +263,12 @@ export const downloadDocument = async (
   window.URL.revokeObjectURL(url);
 };
 
+// -------------------- Archivos compartidos --------------------
 
+/**
+ * Sube un archivo al servidor.
+ * @param file Archivo a subir
+ */
 export const uploadFile = async (file: File): Promise<void> => {
   const formData = new FormData();
   formData.append("file", file);
@@ -215,12 +286,12 @@ export const uploadFile = async (file: File): Promise<void> => {
 };
 
 /**
- * Obtener la lista de archivos disponibles
+ * Obtiene la lista de archivos compartidos disponibles.
  */
 export const listFiles = async (): Promise<string[]> => {
   try {
     const response = await axios.get(`${API_URL}/files/list`);
-    return response.data.files; // se espera que devuelva { files: ["archivo1.txt", "archivo2.pdf", ...] }
+    return response.data.files; // Se espera una respuesta como: { files: ["archivo1.txt", "archivo2.pdf", ...] }
   } catch (error) {
     console.error("Error al listar archivos:", error);
     throw error;
@@ -228,7 +299,8 @@ export const listFiles = async (): Promise<string[]> => {
 };
 
 /**
- * Descargar un archivo por nombre
+ * Descarga un archivo compartido por su nombre.
+ * @param filename Nombre del archivo a descargar
  */
 export const downloadFile = async (filename: string): Promise<void> => {
   try {
