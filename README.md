@@ -72,8 +72,7 @@ WEBSOCKET/
 │   │   ├── pages/                # Vistas/páginas de la aplicación
 │   │   ├── App.tsx               # Componente principal
 │   │   ├── main.tsx              # Punto de entrada de React
-│   │   ├── types.ts              # Definiciones de tipos TypeScript
-│   │   └── *.css/.ts/.tsx        # Otros archivos del frontend
+│   │   └── types.ts              # Definiciones de tipos TypeScript
 │   ├── index.html                # HTML base
 │   ├── vite.config.ts            # Configuración de Vite
 │   ├── tsconfig*.json            # Configuración de TypeScript
