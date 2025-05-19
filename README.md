@@ -42,6 +42,48 @@ Tecnologías y herramientas utilizadas en este proyecto:
 
 ## 📁 Estructura de carpetas
 
+La siguiente es la estructura principal del proyecto, dividida en cliente y servidor:
+
+```bash
+WEBSOCKET/
+│
+├── back\server/                   # Backend (servidor)
+│   ├── data/                      # Datos almacenados (por ejemplo, JSON)
+│   ├── node_modules/             # Dependencias del backend
+│   ├── routes/                   # Rutas de la API
+│   │   ├── auth.js               # Rutas relacionadas con autenticación
+│   │   ├── chat.js               # Rutas de chat y mensajería
+│   │   ├── doc.js                # Rutas de documentos colaborativos
+│   │   └── files.js              # Rutas para subir y descargar archivos
+│   ├── uploads/                  # Archivos subidos por los usuarios
+│   ├── index.js                  # Archivo principal del servidor
+│   ├── package.json              # Configuración y dependencias del backend
+│   └── package-lock.json
+│
+├── front\client/                 # Frontend (cliente)
+│   ├── node_modules/             # Dependencias del frontend
+│   ├── public/                   # Archivos públicos estáticos
+│   │   ├── stucomlogo.png        # Logo del proyecto
+│   │   └── vite.svg
+│   ├── src/                      # Código fuente del frontend
+│   │   ├── api/                  # Llamadas a la API
+│   │   ├── assets/               # Recursos como imágenes, estilos, etc.
+│   │   ├── components/           # Componentes reutilizables de React
+│   │   ├── pages/                # Vistas/páginas de la aplicación
+│   │   ├── App.tsx               # Componente principal
+│   │   ├── main.tsx              # Punto de entrada de React
+│   │   ├── types.ts              # Definiciones de tipos TypeScript
+│   │   └── *.css/.ts/.tsx        # Otros archivos del frontend
+│   ├── index.html                # HTML base
+│   ├── vite.config.ts            # Configuración de Vite
+│   ├── tsconfig*.json            # Configuración de TypeScript
+│   └── package.json              # Configuración y dependencias del frontend
+│
+└── README.md                     # Documentación del proyecto
+```
+
+---
+
 ## ▶️ Clonar el proyecto
 
 Usa el siguiente comando para clonar este repositorio:
