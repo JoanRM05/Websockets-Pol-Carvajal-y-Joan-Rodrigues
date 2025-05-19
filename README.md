@@ -8,10 +8,11 @@ Esta aplicación permite la comunicación en tiempo real a través de salas de c
 
 - [🔧 Funcionalidades](#-funcionalidades)
 - [🧪 Tecnologías](#-tecnologías)
-- [📂 Clonar el proyecto](#-clonar-el-proyecto)
-- [🚀 Instalación de dependencias](#-instalación-de-dependencias)
-- [▶️ Iniciar Cliente](#️-iniciar-cliente)
-- [🖥️ Iniciar Servidor](#️-iniciar-servidor)
+- [📁 Estructura de carpetas](#-estructura-de-carpetas)
+- [▶️ Clonar el proyecto](#-clonar-el-proyecto)
+- [📦 Instalación de dependencias](#-instalación-de-dependencias)
+- [🖥️ Iniciar Cliente](#️-iniciar-cliente)
+- [🚀 Iniciar Servidor](#️-iniciar-servidor)
 - [🎓 Aprendizajes adquiridos](#-aprendizajes-adquiridos)
 
 ---
@@ -39,7 +40,9 @@ Tecnologías y herramientas utilizadas en este proyecto:
 
 ---
 
-## 📂 Clonar el proyecto
+## 📁 Estructura de carpetas
+
+## ▶️ Clonar el proyecto
 
 Usa el siguiente comando para clonar este repositorio:
 
@@ -49,7 +52,7 @@ git clone https://github.com/JoanRM05/Websockets-Pol-Carvajal-y-Joan-Rodrigues.g
 
 ---
 
-## 🚀 Instalación de dependencias
+## 📦 Instalación de dependencias
 
 Instalar dependencias del cliente:
 
@@ -73,7 +76,7 @@ cd ..\..\
 
 ---
 
-## ▶️ Iniciar Cliente
+## 🖥️ Iniciar Cliente
 
 Pasos para iniciar la parte del cliente:
 
@@ -86,7 +89,7 @@ npm run dev
 
 ---
 
-## 🖥️ Iniciar Servidor
+## 🚀 Iniciar Servidor
 
 Pasos para iniciar la parte del servidor:
 
